@@ -4,6 +4,7 @@ import Camera from "./Camera"
 import * as THREE from 'three'
 import Renderer from "./Renderer"
 import World from "./world/World"
+import Debug from "./utils/Debug"
 
 let instance = null
 
@@ -19,6 +20,7 @@ export default class Experience {
         // Global access
         window.experience = this
 
+        this.debug = new Debug();
         this.canvas = canvas;
 
         this.scene = new THREE.Scene();
