@@ -19,8 +19,13 @@ export default class Lightning{
 
         this.directionalLight = new THREE.DirectionalLight('#ffffff', 2)
         this.directionalLight.target.position.set(0, 0, 0)
-        this.directionalLight.position.set(15, 15, 0)
+        this.directionalLight.position.set(15, 15, 15)
         this.directionalLight.castShadow = true
+        this.directionalLight.shadow.camera.far = 100
+        this.directionalLight.shadow.camera.top = 32
+        this.directionalLight.shadow.camera.right = 32
+        this.directionalLight.shadow.camera.bottom = -32
+        this.directionalLight.shadow.camera.left = -32
         this.directionalLight.shadow.mapSize.width = 1024
         this.directionalLight.shadow.mapSize.height = 1024
     
@@ -36,7 +41,7 @@ export default class Lightning{
         this.debugFolder.add(this.ambientLight, 'intensity').min(1).max(5).step(1).name("Ambient light intensity")
         this.debugFolder.add(this.directionalLight.position, 'x')
                         .min(0)
-                        .max(20)
+                        .max(30)
                         .step(1)
                         .name("Directional light position x")
                         .onChange(() => {
@@ -44,7 +49,7 @@ export default class Lightning{
                         })
         this.debugFolder.add(this.directionalLight.position, 'y')
                         .min(0)
-                        .max(20)
+                        .max(30)
                         .step(1)
                         .name("Directional light position y")
                         .onChange(() => {
@@ -52,7 +57,7 @@ export default class Lightning{
                         })
         this.debugFolder.add(this.directionalLight.position, 'z')
                         .min(0)
-                        .max(20)
+                        .max(30)
                         .step(1)
                         .name("Directional light position z")
                         .onChange(() => {
