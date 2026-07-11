@@ -65,7 +65,7 @@ export default class Board {
     }
 
     setDebug() {
-        this.debugFolder = this.debugUI.addFolder('World material parameters')
+        this.debugFolder = this.debugUI.addFolder('Board material parameters')
         this.debugFolder.add(this.boardPlane.material, 'wireframe').name("Wireframe plane")
         this.debugFolder.add(this.boardBorders.material, 'wireframe').name("Wireframe borders")
     }
