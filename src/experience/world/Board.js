@@ -4,10 +4,15 @@ import { SUBTRACTION, Brush, Evaluator } from 'three-bvh-csg';
 
 export default class Board {
 
-    constructor() {
+    constructor(width, height, vertexRatio) {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.debugUI = this.experience.debug.ui
+        this.width = width
+        this.height = height
+        this.vertexRatio = vertexRatio
+        this.borderBevelWidth = 2
+        this.borderBevelHeight = 3
 
         this.setModel()
         this.setDebug()
@@ -15,8 +20,14 @@ export default class Board {
 
     setModel() {
 
-        const boardFilled = new Brush(new THREE.BoxGeometry(34, 3, 34))
-        const boardHole = new Brush(new THREE.BoxGeometry(32, 3.1, 32))
+        const boardFilled = new Brush(new THREE.BoxGeometry(
+            this.width + this.borderBevelWidth, 
+            this.borderBevelHeight, 
+            this.height + this.borderBevelWidth))
+        const boardHole = new Brush(new THREE.BoxGeometry(
+            this.width, 
+            this.borderBevelHeight + 0.1, 
+            this.height))
 
         boardFilled.updateMatrixWorld()
         boardHole.updateMatrixWorld()
@@ -36,7 +47,11 @@ export default class Board {
         this.scene.add(this.boardBorders)
 
         this.boardPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(32, 32, 64, 64),
+            new THREE.PlaneGeometry(
+                this.width, 
+                this.height, 
+                this.width * this.vertexRatio, 
+                this.height * this.vertexRatio),
             new THREE.MeshStandardMaterial({
                 "color": '#64a127', 
                 metalness: 0.0, 
@@ -50,9 +65,42 @@ export default class Board {
     }
 
     setDebug() {
-        this.debugFolder = this.debugUI.addFolder('Material parameters')
+        this.debugFolder = this.debugUI.addFolder('World material parameters')
         this.debugFolder.add(this.boardPlane.material, 'wireframe').name("Wireframe plane")
         this.debugFolder.add(this.boardBorders.material, 'wireframe').name("Wireframe borders")
     }
 
+    destroy() {
+        const meshesToRemove = [];
+
+        this.scene.traverse((object) => {
+            if (object.isMesh) {
+                meshesToRemove.push(object);
+            }
+        });
+
+        meshesToRemove.forEach((mesh) => {
+            
+            mesh.removeFromParent();
+
+            if (mesh.geometry) {
+                mesh.geometry.dispose();
+            }
+
+            if (mesh.material) {
+                if (Array.isArray(mesh.material)) {
+                    mesh.material.forEach((material) => {
+                        material.dispose();
+                    });
+                } else {
+                    mesh.material.dispose();
+                }
+            }
+        });
+
+        if(this.debugFolder){
+            this.debugFolder.destroy()
+            this.debugFolder = null
+        }
+    }
 }
