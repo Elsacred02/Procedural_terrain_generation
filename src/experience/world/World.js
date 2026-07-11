@@ -1,5 +1,7 @@
 import Experience from "../Experience"
 import * as THREE from 'three'
+import Board from "./Board"
+import Lightning from "./Lightning"
 
 export default class World{
 
@@ -7,15 +9,56 @@ export default class World{
 
         this.experience = new Experience()
         this.scene = this.experience.scene
+        this.debugUI = this.experience.debug.ui
+        
+        // Set debug GUI
+        this.parameters = {
+            boardWidth: 32,
+            boardHeight: 32,
+            boardVertexRatio: 2,
+            generate: () => {
+                this.rebuildScene()
+            }
+        }
+        this.setDebug()
 
-        const geometry = new THREE.BoxGeometry(1, 1, 1)
-        const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        const mesh = new THREE.Mesh(geometry, material)
-        this.scene.add(mesh)
-    
+        // Board
+        this.board = new Board(
+            this.parameters.boardWidth,
+            this.parameters.boardHeight,
+            this.parameters.boardVertexRatio
+        )
+
+        // Lights
+        this.lights = new Lightning(
+            this.parameters.boardWidth,
+            this.parameters.boardHeight
+        )
     }
 
     update(){
         
+    }
+
+    rebuildScene() {
+        this.board.destroy()
+        this.lights.destroy()
+        this.board = new Board(
+            this.parameters.boardWidth,
+            this.parameters.boardHeight,
+            this.parameters.boardVertexRatio
+        )
+        this.lights = new Lightning(
+            this.parameters.boardWidth,
+            this.parameters.boardHeight
+        )
+    }
+
+    setDebug() {
+        this.debugFolder = this.debugUI.addFolder('World parameters')
+        this.debugFolder.add(this.parameters, 'boardWidth').min(32).max(64).step(1).name("Board Width")
+        this.debugFolder.add(this.parameters, 'boardHeight').min(32).max(64).step(1).name("Board Height")
+        this.debugFolder.add(this.parameters, 'boardVertexRatio').min(1).max(5).step(1).name("Board Vertex Ratio")
+        this.debugFolder.add(this.parameters, 'generate')
     }
 }
