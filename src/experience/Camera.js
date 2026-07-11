@@ -1,6 +1,7 @@
 import { PerspectiveCamera } from "three";
 import Experience from "./Experience";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
+import { gsap } from "gsap";
 
 export default class Camera{
 
@@ -21,7 +22,7 @@ export default class Camera{
 
     setInstance() {
         this.instance = new PerspectiveCamera(50, this.sizes.width / this.sizes.height, 0.1, 1000)
-        this.instance.position.set(50, 50, 0)
+        this.instance.position.set(0, 50, 50)
         this.scene.add(this.instance)
     }
 
@@ -41,10 +42,21 @@ export default class Camera{
         this.controls.update()
     }
 
+    resetInitialPosition(){
+        gsap.to(this.instance.position, {
+            x: 0,
+            y: 50,
+            z: 50,
+            duration: 2,
+            ease: "power3.inOut",
+            onUpdate: () => {
+                camera.lookAt(0, 0, 0);
+            }
+        });
+    }
+
     setDebugUI() {
         this.debugFolder = this.debugUI.addFolder('Camera parameters')
-        this.debugFolder.add(this.instance.position, 'x').min(1).max(100).step(1).name("Camera position x")
-        this.debugFolder.add(this.instance.position, 'y').min(1).max(100).step(1).name("Camera position y")
-        this.debugFolder.add(this.instance.position, 'z').min(1).max(100).step(1).name("Camera position z")
+        this.debugFolder.add(this, "resetInitialPosition").name("Reset camera initial position")
     }
 }
