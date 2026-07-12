@@ -8,6 +8,7 @@ export default class World{
     constructor(){
 
         this.experience = new Experience()
+        this.resources = this.experience.resources
         this.scene = this.experience.scene
         this.debugUI = this.experience.debug.ui
         
@@ -20,20 +21,27 @@ export default class World{
                 this.rebuildScene()
             }
         }
-        this.setDebug()
 
-        // Board
-        this.board = new Board(
-            this.parameters.boardWidth,
-            this.parameters.boardHeight,
-            this.parameters.boardVertexRatio
-        )
+        this.resources.on('ready', () => {
 
-        // Lights
-        this.lights = new Lightning(
-            this.parameters.boardWidth,
-            this.parameters.boardHeight
-        )
+            this.setDebug()
+
+            // Board
+            this.board = new Board(
+                this.parameters.boardWidth,
+                this.parameters.boardHeight,
+                this.parameters.boardVertexRatio
+            )
+
+            // Lights
+            this.lights = new Lightning(
+                this.parameters.boardWidth,
+                this.parameters.boardHeight
+            )
+
+        })
+
+
     }
 
     update(){

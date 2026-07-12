@@ -72,12 +72,6 @@ export default [
     },
 
     {
-        name : 'Birch',
-        type : 'gltfModel',
-        path : ['./models/trees/birch.glb']
-    },
-
-    {
         name : 'DeadTree',
         type : 'gltfModel',
         path : ['./models/trees/dead_tree.glb']
@@ -92,6 +86,6 @@ export default [
     {
         name : 'Spruce',
         type : 'gltfModel',
-        path : ['./models/trees/spruce.glb']
+        path : ['./models/trees/spruce_tree.glb']
     },
 ]
