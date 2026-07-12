@@ -1,90 +1,66 @@
 export default [
     {
-        name : 'Cloud',
+        name : 'cloud',
         type : 'gltfModel',
         path : ['./models/clouds/cloud.glb']
     },
 
     {
-        name : 'House1',
+        name : 'small_house',
         type : 'gltfModel',
-        path : ['./models/houses/house1.glb']
+        path : ['./models/houses/small_house.glb']
     },
 
     {
-        name : 'House2',
+        name : 'medium_house',
         type : 'gltfModel',
-        path : ['./models/houses/house2.glb']
+        path : ['./models/houses/medium_house.glb']
     },
 
     {
-        name : 'House3',
+        name : 'big_ouse',
         type : 'gltfModel',
-        path : ['./models/houses/house3.glb']
+        path : ['./models/houses/big_house.glb']
     },
 
     {
-        name : 'House4',
+        name : 'big_rock',
         type : 'gltfModel',
-        path : ['./models/houses/house4.glb']
+        path : ['./models/rocks/big_rock.glb']
     },
 
     {
-        name : 'House5',
+        name : 'medium_rock',
         type : 'gltfModel',
-        path : ['./models/houses/house5.glb']
+        path : ['./models/rocks/medium_rock.glb']
     },
 
     {
-        name : 'Rock1',
+        name : 'small_rock',
         type : 'gltfModel',
-        path : ['./models/rocks/rock1.glb']
+        path : ['./models/rocks/small_rock.glb']
     },
 
     {
-        name : 'Rock2',
+        name : 'big_oak_tree',
         type : 'gltfModel',
-        path : ['./models/rocks/rock2.glb']
+        path : ['./models/trees/big_oak_tree.glb']
     },
 
     {
-        name : 'Rock3',
-        type : 'gltfModel',
-        path : ['./models/rocks/rock3.glb']
-    },
-
-    {
-        name : 'Rock4',
-        type : 'gltfModel',
-        path : ['./models/rocks/rock4.glb']
-    },
-
-    {
-        name : 'Rock5',
-        type : 'gltfModel',
-        path : ['./models/rocks/rock5.glb']
-    },
-
-    {
-        name : 'BigOak',
-        type : 'gltfModel',
-        path : ['./models/trees/big_oak.glb']
-    },
-
-    {
-        name : 'DeadTree',
+        name : 'dead_tree',
         type : 'gltfModel',
         path : ['./models/trees/dead_tree.glb']
     },
 
     {
-        name : 'Oak',
+        name : 'oak_tree',
         type : 'gltfModel',
-        path : ['./models/trees/oak.glb']
+        path : ['./models/trees/oak_tree.glb']
     },
 
     {
-        name : 'Spruce',
+        name : 'spruce',
         type : 'gltfModel',
         path : ['./models/trees/spruce_tree.glb']
     },

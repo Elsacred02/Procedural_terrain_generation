@@ -40,12 +40,6 @@ export default class World{
             )
 
         })
-
-
-    }
-
-    update(){
-        
     }
 
     rebuildScene() {
