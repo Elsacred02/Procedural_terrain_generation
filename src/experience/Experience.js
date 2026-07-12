@@ -5,6 +5,8 @@ import * as THREE from 'three'
 import Renderer from "./Renderer"
 import World from "./world/World"
 import Debug from "./utils/Debug"
+import sources from "./utils/Sources"
+import Resources from "./utils/Resources"
 
 let instance = null
 
@@ -35,6 +37,7 @@ export default class Experience {
             this.update()
         })
 
+        this.resources = new Resources(sources)
         this.camera = new Camera();
         this.renderer = new Renderer();
 
