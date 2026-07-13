@@ -56,12 +56,13 @@ export default class World{
             this.parameters.boardWidth,
             this.parameters.boardHeight
         )
+        this.experience.camera.resetInitialPosition()
     }
 
     setDebug() {
         this.debugFolder = this.debugUI.addFolder('World parameters')
-        this.debugFolder.add(this.parameters, 'boardWidth').min(32).max(96).step(1).name("Board Width")
-        this.debugFolder.add(this.parameters, 'boardHeight').min(32).max(96).step(1).name("Board Height")
+        this.debugFolder.add(this.parameters, 'boardWidth').min(32).max(64).step(1).name("Board Width")
+        this.debugFolder.add(this.parameters, 'boardHeight').min(32).max(64).step(1).name("Board Height")
         this.debugFolder.add(this.parameters, 'boardVertexRatio').min(1).max(5).step(1).name("Board Vertex Ratio")
         this.debugFolder.add(this.parameters, 'generate')
     }
