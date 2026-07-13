@@ -50,8 +50,8 @@ export default class Board {
             new THREE.PlaneGeometry(
                 this.width, 
                 this.height, 
-                this.width * this.vertexRatio, 
-                this.height * this.vertexRatio),
+                this.width * this.vertexRatio - 1, 
+                this.height * this.vertexRatio - 1),
             new THREE.MeshStandardMaterial({
                 "color": '#64a127', 
                 metalness: 0.0, 

@@ -22,7 +22,7 @@ export default class Camera{
 
     setInstance() {
         this.instance = new PerspectiveCamera(50, this.sizes.width / this.sizes.height, 0.1, 1000)
-        this.instance.position.set(0, 50, 50)
+        this.instance.position.set(0, 70, 70)
         this.scene.add(this.instance)
     }
 
@@ -45,8 +45,8 @@ export default class Camera{
     resetInitialPosition(){
         gsap.to(this.instance.position, {
             x: 0,
-            y: 50,
-            z: 50,
+            y: 60,
+            z: 60,
             duration: 2,
             ease: "power3.inOut",
             onUpdate: () => {

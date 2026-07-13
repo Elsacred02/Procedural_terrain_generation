@@ -14,8 +14,8 @@ export default class World{
         
         // Set debug GUI
         this.parameters = {
-            boardWidth: 32,
-            boardHeight: 32,
+            boardWidth: 64,
+            boardHeight: 64,
             boardVertexRatio: 2,
             generate: () => {
                 this.rebuildScene()
@@ -25,6 +25,8 @@ export default class World{
         this.resources.on('ready', () => {
 
             this.setDebug()
+
+            // HeightMatrix
 
             // Board
             this.board = new Board(
@@ -58,8 +60,8 @@ export default class World{
 
     setDebug() {
         this.debugFolder = this.debugUI.addFolder('World parameters')
-        this.debugFolder.add(this.parameters, 'boardWidth').min(32).max(64).step(1).name("Board Width")
-        this.debugFolder.add(this.parameters, 'boardHeight').min(32).max(64).step(1).name("Board Height")
+        this.debugFolder.add(this.parameters, 'boardWidth').min(32).max(96).step(1).name("Board Width")
+        this.debugFolder.add(this.parameters, 'boardHeight').min(32).max(96).step(1).name("Board Height")
         this.debugFolder.add(this.parameters, 'boardVertexRatio').min(1).max(5).step(1).name("Board Vertex Ratio")
         this.debugFolder.add(this.parameters, 'generate')
     }

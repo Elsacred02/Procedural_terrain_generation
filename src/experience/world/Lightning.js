@@ -24,10 +24,10 @@ export default class Lightning{
         this.directionalLight.position.set(- this.boardWidth / 2, 15, this.boardHeight / 2)
         this.directionalLight.castShadow = true
         this.directionalLight.shadow.camera.far = 100
-        this.directionalLight.shadow.camera.top = 64
-        this.directionalLight.shadow.camera.right = 64
-        this.directionalLight.shadow.camera.bottom = -64
-        this.directionalLight.shadow.camera.left = -64
+        this.directionalLight.shadow.camera.top = this.boardHeight
+        this.directionalLight.shadow.camera.right = this.boardWidth
+        this.directionalLight.shadow.camera.bottom = -this.boardHeight
+        this.directionalLight.shadow.camera.left = -this.boardWidth
         this.directionalLight.shadow.mapSize.width = 1024
         this.directionalLight.shadow.mapSize.height = 1024
     
