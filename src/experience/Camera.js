@@ -45,12 +45,12 @@ export default class Camera{
     resetInitialPosition(){
         gsap.to(this.instance.position, {
             x: 0,
-            y: 60,
-            z: 60,
+            y: 70,
+            z: 70,
             duration: 2,
             ease: "power3.inOut",
             onUpdate: () => {
-                camera.lookAt(0, 0, 0);
+                this.instance.lookAt(0, 0, 0);
             }
         });
     }
