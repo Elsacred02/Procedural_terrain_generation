@@ -1,16 +1,26 @@
 import Experience from "../Experience";
 import * as THREE from 'three'
 import { SUBTRACTION, Brush, Evaluator } from 'three-bvh-csg';
+import terrainVertexShader from '../shaders/terrain/vertex.glsl'
+import terrainFragmentShader from '../shaders/terrain/fragment.glsl'
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 
 export default class Board {
 
-    constructor(width, height, vertexRatio) {
+    constructor(width, height, vertexRatio, vertexHeightMap, heightScale) {
+
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.debugUI = this.experience.debug.ui
+
         this.width = width
         this.height = height
+
         this.vertexRatio = vertexRatio
+        this.vertexHeightMap = vertexHeightMap
+        this.heightScale = heightScale
+        this.vertexHeightMapTexture = this.vertexHeightMap.buildTexture()
+
         this.borderBevelWidth = 2
         this.borderBevelHeight = 3
 
@@ -52,8 +62,20 @@ export default class Board {
                 this.height, 
                 this.width * this.vertexRatio - 1, 
                 this.height * this.vertexRatio - 1),
-            new THREE.MeshStandardMaterial({
-                "color": '#64a127', 
+            new CustomShaderMaterial({
+                baseMaterial: THREE.MeshStandardMaterial,
+                
+                vertexShader: terrainVertexShader,
+                fragmentShader: terrainFragmentShader,
+                uniforms: {
+                    heightMap: {
+                        value: this.vertexHeightMapTexture
+                    },
+                    heightScale: {
+                        value: this.heightScale
+                    }
+                },
+
                 metalness: 0.0, 
                 roughness: 0.5
             })

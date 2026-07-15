@@ -59,6 +59,13 @@ export default class HeightMap {
             );
 
         heightTexture.needsUpdate = true;
+
+        heightTexture.wrapS = THREE.ClampToEdgeWrapping;
+        heightTexture.wrapT = THREE.ClampToEdgeWrapping;
+
+        heightTexture.minFilter = THREE.NearestFilter;
+        heightTexture.magFilter = THREE.NearestFilter;
+
         return heightTexture;
     }
 }
