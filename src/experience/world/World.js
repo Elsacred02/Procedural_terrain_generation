@@ -19,7 +19,7 @@ export default class World{
 
             boardWidth: 64,
             boardHeight: 64,
-            boardVertexRatio: 2,
+            boardVertexRatio: 4,
 
             perlinNoiseOctaves: 4,
             perlinNoiseCoordinatesScale: 0.01,
@@ -72,7 +72,9 @@ export default class World{
         this.board = new Board(
             this.parameters.boardWidth,
             this.parameters.boardHeight,
-            this.parameters.boardVertexRatio
+            this.parameters.boardVertexRatio,
+            this.heightMap, 
+            this.parameters.mapHeightScale
         )
         this.lights = new Lightning(
             this.parameters.boardWidth,
@@ -97,22 +99,22 @@ export default class World{
         })
 
         this.debugFolder.add(this.parameters, 'boardWidth')
-            .min(32).max(64).step(1)
+            .min(48).max(64).step(1)
             .name("Board Width")
         this.debugFolder.add(this.parameters, 'boardHeight')
-            .min(32).max(64).step(1)
+            .min(48).max(64).step(1)
             .name("Board Height")
         this.debugFolder.add(this.parameters, 'boardVertexRatio')
-            .min(1).max(5).step(1)
+            .min(1).max(8).step(1)
             .name("Board Vertex Ratio")
         this.debugFolder.add(this.parameters, 'perlinNoiseOctaves')
             .min(1).max(6).step(1)
             .name("Number of Perlin noise octaves")
         this.debugFolder.add(this.parameters, 'perlinNoiseCoordinatesScale')
-            .min(0.01).max(0.2).step(0.01)
+            .min(0.005).max(0.05).step(0.005)
             .name("Scale Perlin noise coordinates")
         this.debugFolder.add(this.parameters, 'mapHeightScale')
-            .min(2).max(20).step(1)
+            .min(5).max(20).step(1)
             .name("Scale of height of mountains")
         this.debugFolder.add(this.parameters, 'generate')
     }

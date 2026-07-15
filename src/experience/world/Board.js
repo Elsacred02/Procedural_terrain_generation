@@ -21,8 +21,16 @@ export default class Board {
         this.heightScale = heightScale
         this.vertexHeightMapTexture = this.vertexHeightMap.buildTexture()
 
-        this.borderBevelWidth = 2
-        this.borderBevelHeight = 3
+        this.borderBevelWidth = 4
+        this.borderBevelHeight = this.heightScale
+        this.uniforms = {
+            uHeightMap: {
+                value: this.vertexHeightMapTexture
+            },
+            uHeightScale: {
+                value: this.heightScale
+            }
+        }
 
         this.setModel()
         this.setDebug()
@@ -53,7 +61,7 @@ export default class Board {
         })
         this.boardBorders.castShadow = true
         this.boardBorders.receiveShadow = true
-        this.boardBorders.position.y = 1
+        this.boardBorders.position.y = this.borderBevelHeight / 2
         this.scene.add(this.boardBorders)
 
         this.boardPlane = new THREE.Mesh(
@@ -67,19 +75,24 @@ export default class Board {
                 
                 vertexShader: terrainVertexShader,
                 fragmentShader: terrainFragmentShader,
-                uniforms: {
-                    heightMap: {
-                        value: this.vertexHeightMapTexture
-                    },
-                    heightScale: {
-                        value: this.heightScale
-                    }
-                },
-
+                uniforms: this.uniforms,
                 metalness: 0.0, 
                 roughness: 0.5
             })
         )
+
+        const planeDepthMaterial = new CustomShaderMaterial({
+
+            baseMaterial: THREE.MeshDepthMaterial,
+            vertexShader: terrainVertexShader,
+            uniforms: this.uniforms,
+
+            // MeshDepthMaterial
+            depthPacking: THREE.RGBADepthPacking
+        })
+
+        this.boardPlane.customDepthMaterial = planeDepthMaterial
+
         this.boardPlane.rotateX(- Math.PI / 2)
         this.boardPlane.castShadow = true
         this.boardPlane.receiveShadow = true
