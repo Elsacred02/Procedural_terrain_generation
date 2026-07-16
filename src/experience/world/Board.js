@@ -29,6 +29,12 @@ export default class Board {
             },
             uHeightScale: {
                 value: this.heightScale
+            },
+            uHeightMapSize : {
+                value: new THREE.Vector2(
+                    this.vertexHeightMap.width,
+                    this.vertexHeightMap.height
+                )
             }
         }
 
