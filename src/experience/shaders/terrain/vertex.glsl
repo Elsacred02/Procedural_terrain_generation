@@ -1,5 +1,6 @@
 uniform sampler2D uHeightMap;
 uniform float uHeightScale;
+uniform float uHeightPower;
 uniform vec2 uHeightMapSize;
 uniform vec2 uTerrainSize;
 
@@ -16,7 +17,7 @@ void main() {
         texture2D(uHeightMap, uv).r
     );
 
-    pos.z += pow(h, 3.0) * uHeightScale;
+    pos.z += pow(h, uHeightPower) * uHeightScale;
 
     csm_Position = pos;
 
@@ -51,6 +52,6 @@ void main() {
 
     csm_Normal = normalize(cross(tangent, bitangent));
 
-    vHeight = pow(h, 3.0);
+    vHeight = pow(h, uHeightPower);
     vUv = uv;
 }

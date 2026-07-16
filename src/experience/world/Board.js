@@ -7,7 +7,7 @@ import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 
 export default class Board {
 
-    constructor(width, height, vertexRatio, vertexHeightMap, heightScale) {
+    constructor(width, height, vertexRatio, vertexHeightMap, heightScale, heightPower) {
 
         this.experience = new Experience()
         this.scene = this.experience.scene
@@ -19,6 +19,7 @@ export default class Board {
         this.vertexRatio = vertexRatio
         this.vertexHeightMap = vertexHeightMap
         this.heightScale = heightScale
+        this.heightPower = heightPower
         this.vertexHeightMapTexture = this.vertexHeightMap.buildTexture()
 
         this.borderBevelWidth = 4
@@ -33,6 +34,9 @@ export default class Board {
             },
             uHeightScale: {
                 value: this.heightScale
+            },
+            uHeightPower:{
+                value: this.heightPower
             },
             uHeightMapSize : {
                 value: new THREE.Vector2(

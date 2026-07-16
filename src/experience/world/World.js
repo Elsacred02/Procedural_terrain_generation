@@ -24,7 +24,7 @@ export default class World{
             perlinNoiseOctaves: 4,
             perlinNoiseCoordinatesScale: 0.01,
             mapHeightScale: 10,
-            powerHeightScale: 1.0,
+            mapPowerScale: 3.0,
 
             generate: () => {
                 this.rebuildScene()
@@ -49,7 +49,8 @@ export default class World{
                 this.parameters.boardHeight,
                 this.parameters.boardVertexRatio,
                 this.heightMap,
-                this.parameters.mapHeightScale
+                this.parameters.mapHeightScale,
+                this.parameters.mapPowerScale
             )
 
             // Lights
@@ -75,7 +76,8 @@ export default class World{
             this.parameters.boardHeight,
             this.parameters.boardVertexRatio,
             this.heightMap, 
-            this.parameters.mapHeightScale
+            this.parameters.mapHeightScale,
+            this.parameters.mapPowerScale
         )
         this.lights = new Lightning(
             this.parameters.boardWidth,
@@ -117,6 +119,9 @@ export default class World{
         this.debugFolder.add(this.parameters, 'mapHeightScale')
             .min(5).max(20).step(1)
             .name("Scale of height of mountains")
+        this.debugFolder.add(this.parameters, 'mapPowerScale')
+            .min(1).max(3).step(0.1)
+            .name("Reduce the number of mountains")
         this.debugFolder.add(this.parameters, 'generate')
     }
 }
