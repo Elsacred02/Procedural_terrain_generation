@@ -1,18 +1,53 @@
 import Experience from "../Experience";
 import * as THREE from 'three'
 import { SUBTRACTION, Brush, Evaluator } from 'three-bvh-csg';
+import terrainVertexShader from '../shaders/terrain/vertex.glsl'
+import terrainFragmentShader from '../shaders/terrain/fragment.glsl'
+import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 
 export default class Board {
 
-    constructor(width, height, vertexRatio) {
+    constructor(width, height, vertexRatio, vertexHeightMap, heightScale, heightPower) {
+
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.debugUI = this.experience.debug.ui
+
         this.width = width
         this.height = height
+
         this.vertexRatio = vertexRatio
-        this.borderBevelWidth = 2
-        this.borderBevelHeight = 3
+        this.vertexHeightMap = vertexHeightMap
+        this.heightScale = heightScale
+        this.heightPower = heightPower
+        this.vertexHeightMapTexture = this.vertexHeightMap.buildTexture()
+
+        this.borderBevelWidth = 4
+        this.borderBevelHeight = this.heightScale
+
+        const stepX = this.width / (this.width * this.vertexRatio - 1)
+        const stepY = this.height / (this.height * this.vertexRatio - 1)
+
+        this.uniforms = {
+            uHeightMap: {
+                value: this.vertexHeightMapTexture
+            },
+            uHeightScale: {
+                value: this.heightScale
+            },
+            uHeightPower:{
+                value: this.heightPower
+            },
+            uHeightMapSize : {
+                value: new THREE.Vector2(
+                    this.vertexHeightMap.width,
+                    this.vertexHeightMap.height
+                )
+            },
+            uTerrainSize: {
+                value: new THREE.Vector2(stepX, stepY)
+            }
+        }
 
         this.setModel()
         this.setDebug()
@@ -43,21 +78,43 @@ export default class Board {
         })
         this.boardBorders.castShadow = true
         this.boardBorders.receiveShadow = true
-        this.boardBorders.position.y = 1
+        this.boardBorders.position.y = this.borderBevelHeight / 2
         this.scene.add(this.boardBorders)
 
-        this.boardPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(
-                this.width, 
-                this.height, 
-                this.width * this.vertexRatio, 
-                this.height * this.vertexRatio),
-            new THREE.MeshStandardMaterial({
-                "color": '#64a127', 
-                metalness: 0.0, 
-                roughness: 0.5
-            })
+        this.boardPlaneGeometry = new THREE.PlaneGeometry(
+            this.width, 
+            this.height, 
+            this.width * this.vertexRatio - 1, 
+            this.height * this.vertexRatio - 1
         )
+        this.boardPlaneGeometry.deleteAttribute('normal')
+
+        this.boardPlaneMaterial = new CustomShaderMaterial({
+            baseMaterial: THREE.MeshStandardMaterial,
+            vertexShader: terrainVertexShader,
+            fragmentShader: terrainFragmentShader,
+            uniforms: this.uniforms,
+            metalness: 0.0, 
+            roughness: 0.5
+        })
+
+        this.boardPlane = new THREE.Mesh(
+            this.boardPlaneGeometry,
+            this.boardPlaneMaterial
+        )
+
+        const planeDepthMaterial = new CustomShaderMaterial({
+
+            baseMaterial: THREE.MeshDepthMaterial,
+            vertexShader: terrainVertexShader,
+            uniforms: this.uniforms,
+
+            // MeshDepthMaterial
+            depthPacking: THREE.RGBADepthPacking
+        })
+
+        this.boardPlane.customDepthMaterial = planeDepthMaterial
+
         this.boardPlane.rotateX(- Math.PI / 2)
         this.boardPlane.castShadow = true
         this.boardPlane.receiveShadow = true
