@@ -119,7 +119,7 @@ export default class World{
             .min(5).max(20).step(1)
             .name("Mountains height")
         this.debugFolder.add(this.parameters, 'heightMapPower')
-            .min(1).max(5).step(0.1)
+            .min(1).max(20).step(0.1)
             .name("Plains size")
         this.debugFolder.add(this.parameters, 'generate')
     }
