@@ -16,12 +16,12 @@ export default class Lightning{
 
     setLights() {
 
-        this.ambientLight = new THREE.AmbientLight('#ffffff', 1)
+        this.ambientLight = new THREE.HemisphereLight('#fffc','#6e3700', 0.7)
         this.scene.add(this.ambientLight)
 
-        this.directionalLight = new THREE.DirectionalLight('#ffffff', 2)
+        this.directionalLight = new THREE.DirectionalLight('#ffffec', 3)
         this.directionalLight.target.position.set(0, 0, 0)
-        this.directionalLight.position.set(- this.boardWidth / 2, 15, this.boardHeight / 2)
+        this.directionalLight.position.set(- this.boardWidth / 2 - 2, 15, this.boardHeight / 2 + 2)
         this.directionalLight.castShadow = true
         this.directionalLight.shadow.camera.far = 100
         this.directionalLight.shadow.camera.top = this.boardHeight
@@ -40,10 +40,10 @@ export default class Lightning{
 
     setDebug() {
         this.debugFolder = this.debugUI.addFolder('Lights parameters')
-        this.debugFolder.add(this.ambientLight, 'intensity').min(1).max(5).step(1).name("Ambient light intensity")
+        this.debugFolder.add(this.ambientLight, 'intensity').min(0.5).max(1).step(0.1).name("Ambient light intensity")
         this.debugFolder.add(this.directionalLight.position, 'x')
-                        .min(- this.boardWidth / 2)
-                        .max(this.boardWidth / 2)
+                        .min(- this.boardWidth / 2 - 2)
+                        .max(this.boardWidth / 2 + 2)
                         .step(1)
                         .name("Directional light position x")
                         .onChange(() => {
@@ -58,8 +58,8 @@ export default class Lightning{
                             this.directionaLightHelper.update()
                         })
         this.debugFolder.add(this.directionalLight.position, 'z')
-                        .min(- this.boardHeight / 2)
-                        .max(this.boardHeight / 2)
+                        .min(- this.boardHeight / 2 - 2)
+                        .max(this.boardHeight / 2 + 2)
                         .step(1)
                         .name("Directional light position z")
                         .onChange(() => {

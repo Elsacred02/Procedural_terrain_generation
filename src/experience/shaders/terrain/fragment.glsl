@@ -12,7 +12,7 @@ void main() {
     color = grass;
 
     // Passaggio verde -> marrone
-    float dirtBlend = smoothstep(0.42, 0.48, vHeight);
+    float dirtBlend = smoothstep(0.1, 0.3, vHeight);
     color = mix(color, dirt, dirtBlend);
 
     // Passaggio marrone -> bianco

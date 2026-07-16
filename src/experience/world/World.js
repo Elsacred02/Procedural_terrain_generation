@@ -24,6 +24,7 @@ export default class World{
             perlinNoiseOctaves: 4,
             perlinNoiseCoordinatesScale: 0.01,
             mapHeightScale: 10,
+            powerHeightScale: 1.0,
 
             generate: () => {
                 this.rebuildScene()
@@ -88,7 +89,7 @@ export default class World{
         this.debugFolder = this.debugUI.addFolder('World parameters')
 
         const axesHelper = new THREE.AxesHelper(5)
-        axesHelper.position.set(0, 3, 0)
+        axesHelper.position.set(0, 20, 0)
         this.debugFolder.add(this.parameters, "axesVisible").onChange((value) => {
             if(value) {
                 this.scene.add(axesHelper)

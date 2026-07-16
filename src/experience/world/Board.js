@@ -23,6 +23,10 @@ export default class Board {
 
         this.borderBevelWidth = 4
         this.borderBevelHeight = this.heightScale
+
+        const stepX = this.width / (this.width * this.vertexRatio - 1)
+        const stepY = this.height / (this.height * this.vertexRatio - 1)
+
         this.uniforms = {
             uHeightMap: {
                 value: this.vertexHeightMapTexture
@@ -35,6 +39,9 @@ export default class Board {
                     this.vertexHeightMap.width,
                     this.vertexHeightMap.height
                 )
+            },
+            uTerrainSize: {
+                value: new THREE.Vector2(stepX, stepY)
             }
         }
 

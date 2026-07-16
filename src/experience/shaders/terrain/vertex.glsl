@@ -1,6 +1,7 @@
 uniform sampler2D uHeightMap;
 uniform float uHeightScale;
 uniform vec2 uHeightMapSize;
+uniform vec2 uTerrainSize;
 
 varying float vHeight;
 varying vec2 vUv;
@@ -11,11 +12,11 @@ void main() {
 
     float h = smoothstep(
         0.2,
-        0.8,
+        0.9,
         texture2D(uHeightMap, uv).r
     );
 
-    pos.z += h * uHeightScale;
+    pos.z += pow(h, 3.0) * uHeightScale;
 
     csm_Position = pos;
 
@@ -23,33 +24,33 @@ void main() {
 
     float hL = smoothstep(
         0.2,
-        0.8,
+        0.9,
         texture2D(uHeightMap, uv - vec2(texel.x, 0.0)).r
     );
 
     float hR = smoothstep(
         0.2,
-        0.8,
+        0.9,
         texture2D(uHeightMap, uv + vec2(texel.x, 0.0)).r
     );
 
     float hD = smoothstep(
         0.2,
-        0.8,
+        0.9,
         texture2D(uHeightMap, uv - vec2(0.0, texel.y)).r
     );
 
     float hU = smoothstep(
         0.2,
-        0.8,
+        0.9,
         texture2D(uHeightMap, uv + vec2(0.0, texel.y)).r
     );
 
-    vec3 tangent = normalize(vec3(1.0, 0.0, (hR - hL) * uHeightScale));
-    vec3 bitangent = normalize(vec3(0.0, 1.0, (hU - hD) * uHeightScale));
+    vec3 tangent = normalize(vec3(uTerrainSize.x, 0.0, (hR - hL) * uHeightScale));
+    vec3 bitangent = normalize(vec3(0.0, uTerrainSize.y, (hU - hD) * uHeightScale));
 
     csm_Normal = normalize(cross(tangent, bitangent));
 
-    vHeight = h;
+    vHeight = pow(h, 3.0);
     vUv = uv;
 }
