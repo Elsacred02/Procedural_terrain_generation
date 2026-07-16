@@ -60,7 +60,7 @@ export default [
     },
 
     {
-        name : 'spruce',
+        name : 'spruce_tree',
         type : 'gltfModel',
         path : ['./models/trees/spruce_tree.glb']
     },

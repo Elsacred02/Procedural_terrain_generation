@@ -81,21 +81,26 @@ export default class Board {
         this.boardBorders.position.y = this.borderBevelHeight / 2
         this.scene.add(this.boardBorders)
 
+        this.boardPlaneGeometry = new THREE.PlaneGeometry(
+            this.width, 
+            this.height, 
+            this.width * this.vertexRatio - 1, 
+            this.height * this.vertexRatio - 1
+        )
+        this.boardPlaneGeometry.deleteAttribute('normal')
+
+        this.boardPlaneMaterial = new CustomShaderMaterial({
+            baseMaterial: THREE.MeshStandardMaterial,
+            vertexShader: terrainVertexShader,
+            fragmentShader: terrainFragmentShader,
+            uniforms: this.uniforms,
+            metalness: 0.0, 
+            roughness: 0.5
+        })
+
         this.boardPlane = new THREE.Mesh(
-            new THREE.PlaneGeometry(
-                this.width, 
-                this.height, 
-                this.width * this.vertexRatio - 1, 
-                this.height * this.vertexRatio - 1),
-            new CustomShaderMaterial({
-                baseMaterial: THREE.MeshStandardMaterial,
-                
-                vertexShader: terrainVertexShader,
-                fragmentShader: terrainFragmentShader,
-                uniforms: this.uniforms,
-                metalness: 0.0, 
-                roughness: 0.5
-            })
+            this.boardPlaneGeometry,
+            this.boardPlaneMaterial
         )
 
         const planeDepthMaterial = new CustomShaderMaterial({

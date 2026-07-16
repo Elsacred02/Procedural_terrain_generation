@@ -23,8 +23,8 @@ export default class World{
 
             perlinNoiseOctaves: 4,
             perlinNoiseCoordinatesScale: 0.01,
-            mapHeightScale: 10,
-            mapPowerScale: 3.0,
+            heightMapScaler: 10,
+            heightMapPower: 3.0,
 
             generate: () => {
                 this.rebuildScene()
@@ -49,8 +49,8 @@ export default class World{
                 this.parameters.boardHeight,
                 this.parameters.boardVertexRatio,
                 this.heightMap,
-                this.parameters.mapHeightScale,
-                this.parameters.mapPowerScale
+                this.parameters.heightMapScaler,
+                this.parameters.heightMapPower
             )
 
             // Lights
@@ -58,7 +58,6 @@ export default class World{
                 this.parameters.boardWidth,
                 this.parameters.boardHeight
             )
-
         })
     }
 
@@ -76,8 +75,8 @@ export default class World{
             this.parameters.boardHeight,
             this.parameters.boardVertexRatio,
             this.heightMap, 
-            this.parameters.mapHeightScale,
-            this.parameters.mapPowerScale
+            this.parameters.heightMapScaler,
+            this.parameters.heightMapPower
         )
         this.lights = new Lightning(
             this.parameters.boardWidth,
@@ -103,25 +102,25 @@ export default class World{
 
         this.debugFolder.add(this.parameters, 'boardWidth')
             .min(48).max(64).step(1)
-            .name("Board Width")
+            .name("Board's Width")
         this.debugFolder.add(this.parameters, 'boardHeight')
             .min(48).max(64).step(1)
-            .name("Board Height")
+            .name("Board's Height")
         this.debugFolder.add(this.parameters, 'boardVertexRatio')
-            .min(1).max(8).step(1)
-            .name("Board Vertex Ratio")
+            .min(0.5).max(8).step(0.5)
+            .name("Board's Vertex Ratio")
         this.debugFolder.add(this.parameters, 'perlinNoiseOctaves')
-            .min(1).max(6).step(1)
-            .name("Number of Perlin noise octaves")
+            .min(1).max(8).step(1)
+            .name("Perlin noise octaves")
         this.debugFolder.add(this.parameters, 'perlinNoiseCoordinatesScale')
-            .min(0.005).max(0.05).step(0.005)
-            .name("Scale Perlin noise coordinates")
-        this.debugFolder.add(this.parameters, 'mapHeightScale')
+            .min(0.005).max(0.1).step(0.005)
+            .name("Perlin noise coordinates scaler")
+        this.debugFolder.add(this.parameters, 'heightMapScaler')
             .min(5).max(20).step(1)
-            .name("Scale of height of mountains")
-        this.debugFolder.add(this.parameters, 'mapPowerScale')
-            .min(1).max(3).step(0.1)
-            .name("Reduce the number of mountains")
+            .name("Mountains height")
+        this.debugFolder.add(this.parameters, 'heightMapPower')
+            .min(1).max(5).step(0.1)
+            .name("Plains size")
         this.debugFolder.add(this.parameters, 'generate')
     }
 }

@@ -12,11 +12,11 @@ void main() {
     color = grass;
 
     // Passaggio verde -> marrone
-    float dirtBlend = smoothstep(0.1, 0.2, vHeight);
+    float dirtBlend = smoothstep(0.2, 0.2, vHeight);
     color = mix(color, dirt, dirtBlend);
 
     // Passaggio marrone -> bianco
-    float snowBlend = smoothstep(0.65, 0.82, vHeight);
+    float snowBlend = smoothstep(0.7, 0.7, vHeight);
     color = mix(color, snow, snowBlend);
 
     csm_DiffuseColor = vec4(color, 1.0);
