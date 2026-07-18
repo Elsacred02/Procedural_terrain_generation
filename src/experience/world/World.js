@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import Board from "./Board"
 import Lightning from "./Lightning"
 import HeightMap from "./HeightMap"
+import AssetMap from "./AssetMap"
 
 export default class World{
 
@@ -33,39 +34,13 @@ export default class World{
         }
 
         this.resources.on('ready', () => {
-
             this.setDebug()
-
-            // HeightMap
-            this.heightMap = new HeightMap(
-                this.parameters.boardWidth * this.parameters.boardVertexRatio,
-                this.parameters.boardHeight * this.parameters.boardVertexRatio,
-                this.parameters.perlinNoiseOctaves,
-                this.parameters.perlinNoiseCoordinatesScale,
-                this.parameters.seed
-            )
-
-            // Board
-            this.board = new Board(
-                this.parameters.boardWidth,
-                this.parameters.boardHeight,
-                this.parameters.boardVertexRatio,
-                this.heightMap,
-                this.parameters.heightMapScaler,
-                this.parameters.heightMapPower
-            )
-
-            // Lights
-            this.lights = new Lightning(
-                this.parameters.boardWidth,
-                this.parameters.boardHeight
-            )
+            this.create()
         })
     }
 
-    rebuildScene() {
-        this.board.destroy()
-        this.lights.destroy()
+    create() {
+
         this.heightMap = new HeightMap(
             this.parameters.boardWidth * this.parameters.boardVertexRatio,
             this.parameters.boardHeight * this.parameters.boardVertexRatio,
@@ -73,18 +48,31 @@ export default class World{
             this.parameters.perlinNoiseCoordinatesScale,
             this.parameters.seed
         )
+
+        this.assetMap = new AssetMap(
+            this.parameters.boardVertexRatio,
+            this.heightMap
+        )
+
         this.board = new Board(
             this.parameters.boardWidth,
             this.parameters.boardHeight,
             this.parameters.boardVertexRatio,
-            this.heightMap, 
+            this.heightMap,
             this.parameters.heightMapScaler,
             this.parameters.heightMapPower
         )
+
         this.lights = new Lightning(
             this.parameters.boardWidth,
             this.parameters.boardHeight
         )
+    }
+
+    rebuildScene() {
+        this.board.destroy()
+        this.lights.destroy()
+        this.create()
         this.experience.camera.resetInitialPosition()
     }
 
@@ -106,12 +94,6 @@ export default class World{
         this.debugFolder.add(this.parameters, 'seed')
             .min(0).max(64).step(1)
             .name("World seed")
-        this.debugFolder.add(this.parameters, 'boardWidth')
-            .min(48).max(64).step(1)
-            .name("Board's Width")
-        this.debugFolder.add(this.parameters, 'boardHeight')
-            .min(48).max(64).step(1)
-            .name("Board's Height")
         this.debugFolder.add(this.parameters, 'boardVertexRatio')
             .min(0.5).max(8).step(0.5)
             .name("Board's Vertex Ratio")
@@ -119,7 +101,7 @@ export default class World{
             .min(1).max(8).step(1)
             .name("Perlin noise octaves")
         this.debugFolder.add(this.parameters, 'perlinNoiseCoordinatesScale')
-            .min(0.005).max(0.1).step(0.005)
+            .min(0.005).max(0.03).step(0.005)
             .name("Perlin noise coordinates scaler")
         this.debugFolder.add(this.parameters, 'heightMapScaler')
             .min(5).max(20).step(1)
