@@ -1,7 +1,7 @@
 export default class AssetMap {
-    constructor(vertexRatio, heightMap) {
-        this.vertexRatio = vertexRatio
+    constructor(heightMap, vertexRatio) {
         this.heightMap = heightMap
+        this.vertexRatio = vertexRatio
         this.data = new Float32Array(
             (heightMap.width / 4) * (heightMap.height / 4)
         )
