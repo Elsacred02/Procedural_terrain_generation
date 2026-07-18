@@ -5,6 +5,7 @@ import HeightMap from "./HeightMap"
 import AssetMap from "./AssetMap"
 import BoardPlane from "./boardComponents/BoardPlane"
 import BoardBevel from "./boardComponents/BoardBevel"
+import BoardAssets from "./boardComponents/BoardAssets"
 
 export default class World{
 
@@ -48,8 +49,7 @@ export default class World{
         )
 
         this.assetMap = new AssetMap(
-            this.heightMap,
-            this.parameters.boardVertexRatio
+            this.heightMap
         )
 
         this.boardBevel = new BoardBevel(
@@ -66,6 +66,12 @@ export default class World{
             this.heightMap,
             this.parameters.heightMapScaler,
             this.parameters.heightMapPower
+        )
+
+        this.boardAssets = new BoardAssets(
+            this.boardPlane,
+            this.assetMap,
+            this.heightMap
         )
 
         this.lights = new Lightning(

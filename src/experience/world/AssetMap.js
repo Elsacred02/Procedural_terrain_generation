@@ -1,11 +1,13 @@
 export default class AssetMap {
-    constructor(heightMap, vertexRatio) {
+    constructor(heightMap) {
         this.heightMap = heightMap
-        this.vertexRatio = vertexRatio
+        this.width = heightMap.width / 4
+        this.height = heightMap.height / 4
         this.data = new Float32Array(
-            (heightMap.width / 4) * (heightMap.height / 4)
+            this.width * this.height
         )
         this.init()
+        this.data = this.randomAssetMap(200)
     }
 
     init() {
@@ -27,8 +29,7 @@ export default class AssetMap {
 
             // se la posizione è vuota, inserisci l'asset
             if(this.data[index] === 0) {
-                // valore casuale tra 1 e 10
-                this.data[index] = Math.floor(Math.random() * 10) + 1
+                this.data[index] = 1
                 placedAssets++
             }
         }
