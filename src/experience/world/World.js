@@ -25,6 +25,7 @@ export default class World{
             perlinNoiseCoordinatesScale: 0.01,
             heightMapScaler: 10,
             heightMapPower: 3.0,
+            seed: 0,
 
             generate: () => {
                 this.rebuildScene()
@@ -40,7 +41,8 @@ export default class World{
                 this.parameters.boardWidth * this.parameters.boardVertexRatio,
                 this.parameters.boardHeight * this.parameters.boardVertexRatio,
                 this.parameters.perlinNoiseOctaves,
-                this.parameters.perlinNoiseCoordinatesScale
+                this.parameters.perlinNoiseCoordinatesScale,
+                this.parameters.seed
             )
 
             // Board
@@ -68,7 +70,8 @@ export default class World{
             this.parameters.boardWidth * this.parameters.boardVertexRatio,
             this.parameters.boardHeight * this.parameters.boardVertexRatio,
             this.parameters.perlinNoiseOctaves,
-            this.parameters.perlinNoiseCoordinatesScale
+            this.parameters.perlinNoiseCoordinatesScale,
+            this.parameters.seed
         )
         this.board = new Board(
             this.parameters.boardWidth,
@@ -100,6 +103,9 @@ export default class World{
             }
         })
 
+        this.debugFolder.add(this.parameters, 'seed')
+            .min(0).max(64).step(1)
+            .name("World seed")
         this.debugFolder.add(this.parameters, 'boardWidth')
             .min(48).max(64).step(1)
             .name("Board's Width")

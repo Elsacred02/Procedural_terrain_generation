@@ -5,7 +5,7 @@ class SimpleVector2 {
     }
 }
 
-const permutation = [ 
+let permutation = [ 
     151, 160, 137,  91,  90,  15, 131,  13, 201,  95,  96,  53, 194, 233,   7, 225,
     140,  36, 103,  30,  69, 142,   8,  99,  37, 240,  21,  10,  23, 190,   6, 148,
     247, 120, 234,  75,   0,  26, 197,  62,  94, 252, 219, 203, 117,  35,  11,  32,
@@ -38,8 +38,10 @@ const gradients = [
 
 export default class PerlinNoise{
 
-    constructor() {
-
+    constructor(seed) {
+        this.seed = seed
+        if(seed != 0)
+            permutation = this.generatePermutation(seed)
     }
 
     getGradient(gridVector) {
@@ -118,4 +120,32 @@ export default class PerlinNoise{
 
         return noise
     }
+
+    mulberry32(seed) {
+        return function () {
+            let t = seed += 0x6D2B79F5;
+            t = Math.imul(t ^ (t >>> 15), t | 1);
+            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+    }
+
+    generatePermutation(seed) {
+
+        const random = this.mulberry32(seed);
+
+        const permutation = new Uint8Array(256);
+
+        for (let i = 0; i < 256; i++) {
+            permutation[i] = i;
+        }
+
+        for (let i = 255; i > 0; i--) {
+            const j = Math.floor(random() * (i + 1));
+            [permutation[i], permutation[j]] = [permutation[j], permutation[i]];
+        }
+
+        return permutation;
+    }
+
 }

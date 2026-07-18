@@ -4,13 +4,13 @@ import PerlinNoise from "../utils/PerlinNoise";
 
 export default class HeightMap {
 
-    constructor(width, height, octaves, scale) {
+    constructor(width, height, octaves, scale, perlinSeed) {
 
         this.width = width;
         this.height = height;
         this.octaves = octaves;
         this.scale = scale;
-        this.perlinNoise = new PerlinNoise();
+        this.perlinNoise = new PerlinNoise(perlinSeed);
         this.data = new Float32Array(
             width * height
         );
