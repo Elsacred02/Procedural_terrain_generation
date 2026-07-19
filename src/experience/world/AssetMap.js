@@ -7,7 +7,7 @@ export default class AssetMap {
             this.width * this.height
         )
         this.init()
-        this.data = this.randomAssetMap(200)
+        this.data = this.randomAssetMap(5)
     }
 
     init() {

@@ -21,7 +21,7 @@ export default class World{
             boardBevel: 4,
             boardWidth: 64,
             boardHeight: 64,
-            boardVertexRatio: 4,
+            boardVertexRatio: 1,
             perlinNoiseOctaves: 4,
             perlinNoiseCoordinatesScale: 0.01,
             heightMapScaler: 10,
