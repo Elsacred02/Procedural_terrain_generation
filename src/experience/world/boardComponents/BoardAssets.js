@@ -1,8 +1,10 @@
 import * as THREE from 'three'
 import Experience from '../../Experience'
+import Tree from './assetsClass/Tree'
+import Rock from './assetsClass/Rock'
 
 export default class BoardAssets {
-    constructor(boardPlane, assetMap, heightMap) {
+    constructor(boardPlane, assetMap, heightMap, assetResolution, numberOfAssets) {
 
         this.experience = new Experience()
         this.scene = this.experience.scene
@@ -12,44 +14,21 @@ export default class BoardAssets {
         this.resources = this.experience.resources
         this.heightScale = this.boardPlane.heightScale
         this.heightPower = this.boardPlane.heightPower
+        this.assetResolution = assetResolution
+        this.numberOfAssets = numberOfAssets
+        this.treeProportions = {
+            spruce: 80,
+            oak:20,
+        }
 
         this.setup()
     }
 
     setup() {
 
-        const logGeometry = this.resources.items["oak_tree"]
-            .scene.getObjectByName("oak_log").geometry
-
-        const logMaterial = this.resources.items["oak_tree"]
-            .scene.getObjectByName("oak_log").material
-
-
-        const leavesGeometry = this.resources.items["oak_tree"]
-            .scene.getObjectByName("oak_leaves").geometry
-
-        const leavesMaterial = this.resources.items["oak_tree"]
-            .scene.getObjectByName("oak_leaves").material
-
-
-        const meshLog = new THREE.InstancedMesh(
-            logGeometry,
-            logMaterial,
-            1000
-        )
-
-        const meshLeaves = new THREE.InstancedMesh(
-            leavesGeometry,
-            leavesMaterial,
-            1000
-        )
-
-        meshLog.count = 0
-        meshLeaves.count = 0
-
-
-        this.scene.add(meshLog, meshLeaves)
-
+        this.spruceTree = new Tree(this.numberOfAssets, this.boardPlane, "spruce", 2)
+        this.oakTree = new Tree(this.numberOfAssets, this.boardPlane, "oak", 1)
+        this.rock = new Rock(this.numberOfAssets, this.boardPlane, 5)
 
         for(let y = 0; y < this.assetMap.height; y++) {
 
@@ -63,32 +42,43 @@ export default class BoardAssets {
 
 
                     // posizione iniziale nella heightmap
-                    const hx = x * 4
-                    const hy = y * 4
+                    const hx = x * this.assetResolution
+                    const hy = y * this.assetResolution
 
                     const worldX =
                         -this.boardPlane.width / 2 +
-                        x * (this.boardPlane.width / this.assetMap.width)
+                        x * (this.boardPlane.width / this.assetMap.width) + Math.random() * 0.4 - 0.2
 
 
                     const worldZ =
                         this.boardPlane.height / 2 -
-                        y * (this.boardPlane.height / this.assetMap.height);
+                        y * (this.boardPlane.height / this.assetMap.height) + Math.random() * 0.4 - 0.2
 
 
+                    const hNormal = this.interpolateHeight(hx,hy) 
                     const worldY =
                         this.getWorldHeight(
-                            this.interpolateHeight(hx,hy)
-                        ) -0.5
-
-
-                    this.spawn(
-                        worldX,
-                        worldY,
-                        worldZ,
-                        meshLog,
-                        meshLeaves
-                    )
+                            hNormal
+                        )
+                    
+                    if (hNormal < 0.3)
+                        this.oakTree.spawn(
+                            worldX,
+                            worldY,
+                            worldZ
+                        )
+                    else if (hNormal < 0.7 && hNormal > 0.3)
+                        this.spruceTree.spawn(
+                            worldX,
+                            worldY,
+                            worldZ
+                        )
+                    else 
+                        this.rock.spawn(
+                            worldX,
+                            worldY,
+                            worldZ
+                        )
                 }
             }
         }
@@ -98,9 +88,9 @@ export default class BoardAssets {
 
         let sum = 0;
 
-        for (let y = 0; y < 4; y++) {
+        for (let y = 0; y < 2; y++) {
 
-            for (let x = 0; x < 4; x++) {
+            for (let x = 0; x < 2; x++) {
 
                 const hx = startX + x;
                 const hy = startY + y;
@@ -111,7 +101,7 @@ export default class BoardAssets {
             }
         }
 
-        return sum / 16;
+        return sum / 4;
     }
 
     getWorldHeight(value) {
@@ -125,24 +115,32 @@ export default class BoardAssets {
         return Math.pow(h, this.heightPower) * this.heightScale
     }
 
-    spawn(x, y, z, log, leaves) {
-        const dummy = new THREE.Object3D()
-        dummy.scale.set(1 / this.boardPlane.vertexRatio, 1 / this.boardPlane.vertexRatio, 1 / this.boardPlane.vertexRatio)
-        dummy.position.set(x, y, z)
-        dummy.rotation.set(0, 0, 0)
-        dummy.updateMatrix()
-        log.setMatrixAt(
-            log.count,
-            dummy.matrix
-        )
-        leaves.setMatrixAt(
-            leaves.count,
-            dummy.matrix
-        )
-        log.count += 1;
-        leaves.count +=1
-        log.instanceMatrix.needsUpdate = true
-        leaves.instanceMatrix.needsUpdate = true
-    }
+    destroy() {
 
+        const meshesToRemove = [];
+
+        this.scene.traverse((child) => {
+
+            if (
+                child.isInstancedMesh &&
+                child.userData.boardAsset
+            ) {
+                meshesToRemove.push(child);
+            }
+
+        });
+
+        for (const mesh of meshesToRemove) {
+
+            this.scene.remove(mesh);
+
+            mesh.geometry.dispose();
+
+            if (Array.isArray(mesh.material)) {
+                mesh.material.forEach(material => material.dispose());
+            } else {
+                mesh.material.dispose();
+            }
+        }
+    }
 }

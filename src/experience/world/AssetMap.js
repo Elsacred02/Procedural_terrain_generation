@@ -1,13 +1,13 @@
 export default class AssetMap {
-    constructor(heightMap) {
+    constructor(heightMap, assetResolution, numberOfAssets) {
         this.heightMap = heightMap
-        this.width = heightMap.width / 4
-        this.height = heightMap.height / 4
+        this.width = heightMap.width / assetResolution
+        this.height = heightMap.height / assetResolution
         this.data = new Float32Array(
             this.width * this.height
         )
         this.init()
-        this.data = this.randomAssetMap(5)
+        this.data = this.randomAssetMap(numberOfAssets)
     }
 
     init() {

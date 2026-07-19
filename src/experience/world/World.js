@@ -21,12 +21,14 @@ export default class World{
             boardBevel: 4,
             boardWidth: 64,
             boardHeight: 64,
-            boardVertexRatio: 1,
+            boardVertexRatio: 4,
             perlinNoiseOctaves: 4,
             perlinNoiseCoordinatesScale: 0.01,
             heightMapScaler: 10,
             heightMapPower: 3.0,
             seed: 0,
+            boardAssetResolution: 4,
+            numberOfAssets : 500,
             generate: () => {
                 this.rebuildScene()
             }
@@ -49,7 +51,9 @@ export default class World{
         )
 
         this.assetMap = new AssetMap(
-            this.heightMap
+            this.heightMap,
+            this.parameters.boardAssetResolution,
+            this.parameters.numberOfAssets
         )
 
         this.boardBevel = new BoardBevel(
@@ -71,7 +75,9 @@ export default class World{
         this.boardAssets = new BoardAssets(
             this.boardPlane,
             this.assetMap,
-            this.heightMap
+            this.heightMap,
+            this.parameters.boardAssetResolution,
+            this.parameters.numberOfAssets
         )
 
         this.lights = new Lightning(
@@ -83,6 +89,7 @@ export default class World{
     rebuildScene() {
         this.boardBevel.destroy()
         this.boardPlane.destroy()
+        this.boardAssets.destroy()
         this.lights.destroy()
         this.create()
         this.experience.camera.resetInitialPosition()
@@ -108,6 +115,11 @@ export default class World{
         this.debugFolder.add(this.parameters, 'heightMapPower')
             .min(1).max(20).step(0.1)
             .name("Plains size")
+        this.debugFolder.add(this.parameters, 'boardAssetResolution', [4, 8, 16])
+            .name("Control the space between each asset")
+        this.debugFolder.add(this.parameters, 'numberOfAssets')
+            .min(100).max(1000).step(50)
+            .name("Control the number of spawn assets")
         this.debugFolder.add(this.parameters, 'generate')
     }
 }
