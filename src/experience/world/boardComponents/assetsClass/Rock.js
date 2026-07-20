@@ -21,6 +21,9 @@ export default class Rock {
             this.rockMaterial,
             maxNumber
         )
+
+        this.meshRock.castShadow = true
+
         this.meshRock.userData.boardAsset = true
         this.meshRock.count = 0
         this.scene.add(this.meshRock)

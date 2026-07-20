@@ -43,6 +43,8 @@ export default class SpruceTree {
         this.meshLog.count = 0
         this.meshLeaves.count = 0
 
+        this.meshLeaves.castShadow = true
+
         this.scene.add(this.meshLog, this.meshLeaves)
     }
 

@@ -61,22 +61,22 @@ export default class BoardAssets {
                             hNormal
                         )
                     
-                    if (hNormal < 0.3)
+                    if (worldY < this.heightScale * 0.1)
                         this.oakTree.spawn(
                             worldX,
                             worldY,
                             worldZ
                         )
-                    else if (hNormal < 0.7 && hNormal > 0.3)
+                    else if (worldY > this.heightScale * 0.1 && worldY < this.heightScale * 0.8)
                         this.spruceTree.spawn(
                             worldX,
-                            worldY,
+                            worldY - 0.5,
                             worldZ
                         )
-                    else 
+                    else if (worldY >= this.heightScale * 0.8)
                         this.rock.spawn(
                             worldX,
-                            worldY,
+                            worldY -0.2,
                             worldZ
                         )
                 }
