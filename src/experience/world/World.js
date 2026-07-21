@@ -29,6 +29,7 @@ export default class World{
             seed: 0,
             boardAssetResolution: 4,
             numberOfAssets : 500,
+            generationAlgorithm: "random",
             generate: () => {
                 this.rebuildScene()
             }
@@ -53,8 +54,17 @@ export default class World{
         this.assetMap = new AssetMap(
             this.heightMap,
             this.parameters.boardAssetResolution,
-            this.parameters.numberOfAssets
+            this.parameters.heightMapScaler,
+            this.parameters.heightMapPower
         )
+        switch(this.parameters.generationAlgorithm){
+            case "random":
+                this.assetMap.randomAssetMap(this.parameters.numberOfAssets)
+                break
+            case "forests":
+                this.assetMap.forestCluster(this.parameters.numberOfAssets, 20, 100)
+                break
+        }
 
         this.boardBevel = new BoardBevel(
             this.parameters.boardWidth,
@@ -101,7 +111,7 @@ export default class World{
             .min(0).max(64).step(1)
             .name("World seed")
         this.debugFolder.add(this.parameters, 'boardVertexRatio')
-            .min(0.5).max(8).step(0.5)
+            .min(1).max(8).step(0.5)
             .name("Board's Vertex Ratio")
         this.debugFolder.add(this.parameters, 'perlinNoiseOctaves')
             .min(1).max(8).step(1)
@@ -115,11 +125,13 @@ export default class World{
         this.debugFolder.add(this.parameters, 'heightMapPower')
             .min(1).max(20).step(0.1)
             .name("Plains size")
-        this.debugFolder.add(this.parameters, 'boardAssetResolution', [4, 8, 16])
+        this.debugFolder.add(this.parameters, 'boardAssetResolution', [4, 8])
             .name("Control the space between each asset")
         this.debugFolder.add(this.parameters, 'numberOfAssets')
             .min(100).max(1000).step(50)
             .name("Control the number of spawn assets")
+        this.debugFolder.add(this.parameters, 'generationAlgorithm', ["random", "forests"])
+            .name("Control the type of generation")
         this.debugFolder.add(this.parameters, 'generate')
     }
 }
