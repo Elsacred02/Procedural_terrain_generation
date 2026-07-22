@@ -29,6 +29,8 @@ export default class World{
             seed: 0,
             boardAssetResolution: 4,
             numberOfAssets : 500,
+            percentTrees: 0.8,
+            numberOfForests: 10,
             generationAlgorithm: "random",
             generate: () => {
                 this.rebuildScene()
@@ -62,7 +64,12 @@ export default class World{
                 this.assetMap.randomAssetMap(this.parameters.numberOfAssets)
                 break
             case "forests":
-                this.assetMap.forestCluster(this.parameters.numberOfAssets, 20, 100)
+                this.assetMap.forestCluster(
+                    this.parameters.numberOfAssets, 
+                    this.parameters.numberOfForests, 
+                    this.parameters.percentTrees, 
+                    50
+                )
                 break
         }
 
@@ -129,9 +136,25 @@ export default class World{
             .name("Control the space between each asset")
         this.debugFolder.add(this.parameters, 'numberOfAssets')
             .min(100).max(1000).step(50)
-            .name("Control the number of spawn assets")
+            .name("Number of spawn assets")
+        this.numberOfForestsControl = this.debugFolder.add(this.parameters, 'numberOfForests')
+            .min(5).max(20).step(1)
+            .name("Number of spawned forests").hide()
+        this.percentTreesControl = this.debugFolder.add(this.parameters, 'percentTrees')
+            .min(0.1).max(1).step(0.1)
+            .name("Assets assigned to forests").hide()
         this.debugFolder.add(this.parameters, 'generationAlgorithm', ["random", "forests"])
             .name("Control the type of generation")
+            .onChange((chosenAlgorithm) => {
+                if (chosenAlgorithm == "random"){
+                    this.numberOfForestsControl.hide()
+                    this.percentTreesControl.hide()
+                }
+                else{
+                    this.numberOfForestsControl.show()
+                    this.percentTreesControl.show()
+                }
+            })
         this.debugFolder.add(this.parameters, 'generate')
     }
 }
