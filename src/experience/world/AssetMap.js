@@ -14,8 +14,12 @@ export default class AssetMap {
         this.validCells = new Uint8Array(
             this.width * this.height
         )
+        this.validForestsAssets = new Uint8Array(
+            this.width * this.height
+        )
         this.init()
-        this.computeValidCells()
+        this.validCells = this.computeValidCells(0.5, this.validCells)
+        this.validForestsAssets = this.computeValidCells(0.7, this.validForestsAssets)
     }
 
     init() {
@@ -24,15 +28,15 @@ export default class AssetMap {
         }
     }
     
-    computeValidCells() {
+    computeValidCells(maxValidHeight, matrix) {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
-                const height = this.getWorldHeight(
-                    this.interpolateHeight(x * this.assetResolution, y * this.assetResolution)
-                )
-                this.validCells[y * this.width + x] = height <= 0.5 * this.heightScale ? 1 : 0
+                const height = this.getWorldHeight(this.interpolateHeight(x * this.assetResolution, y * this.assetResolution))
+                matrix[y * this.width + x] = height <= maxValidHeight * this.heightScale ? 1 : 0
             }
         }
+
+        return matrix
     }
 
     randomAssetMap(numberOfAssets) {
@@ -77,10 +81,7 @@ export default class AssetMap {
             const x = Math.round(forest.x + Math.cos(angle) * distance)
             const y = Math.round(forest.y + Math.sin(angle) * distance)
 
-            const hx = x * this.assetResolution
-            const hy = y * this.assetResolution
-
-            if (this.getWorldHeight(this.interpolateHeight(hx, hy)) < this.heightScale * 0.7){
+            if (this.validForestsAssets[x + y * this.width] == 1){
                 this.data[y * this.width + x] = 1
                 placed++
             }
