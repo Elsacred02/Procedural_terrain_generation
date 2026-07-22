@@ -5,7 +5,6 @@ uniform vec2 uHeightMapSize;
 uniform vec2 uTerrainSize;
 
 varying float vHeight;
-varying vec2 vUv;
 
 void main() {
 
@@ -53,5 +52,4 @@ void main() {
     csm_Normal = normalize(cross(tangent, bitangent));
 
     vHeight = pow(h, uHeightPower);
-    vUv = uv;
 }
