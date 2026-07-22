@@ -133,7 +133,7 @@ export default class World{
             .min(1).max(20).step(0.1)
             .name("Plains size")
         this.debugFolder.add(this.parameters, 'boardAssetResolution', [4, 8])
-            .name("Control the space between each asset")
+            .name("Asset spawn resolution")
         this.debugFolder.add(this.parameters, 'numberOfAssets')
             .min(100).max(1000).step(50)
             .name("Number of spawn assets")
