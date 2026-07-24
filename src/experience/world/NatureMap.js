@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-export default class AssetMap {
+export default class NatureMap {
     constructor(heightMap, assetResolution, heightScale, heightPower) {
         this.heightMap = heightMap
         this.width = heightMap.width / assetResolution

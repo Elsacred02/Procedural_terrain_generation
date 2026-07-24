@@ -2,10 +2,10 @@ import Experience from "../Experience"
 import * as THREE from 'three'
 import Lightning from "./Lightning"
 import HeightMap from "./HeightMap"
-import AssetMap from "./AssetMap"
+import NatureMap from "./NatureMap"
 import BoardPlane from "./boardComponents/BoardPlane"
 import BoardBevel from "./boardComponents/BoardBevel"
-import BoardAssets from "./boardComponents/BoardAssets"
+import BoardNature from "./boardComponents/BoardNature"
 
 export default class World{
 
@@ -53,7 +53,7 @@ export default class World{
             this.parameters.seed
         )
 
-        this.assetMap = new AssetMap(
+        this.assetMap = new NatureMap(
             this.heightMap,
             this.parameters.boardAssetResolution,
             this.parameters.heightMapScaler,
@@ -89,7 +89,7 @@ export default class World{
             this.parameters.heightMapPower
         )
 
-        this.boardAssets = new BoardAssets(
+        this.boardNature = new BoardNature(
             this.boardPlane,
             this.assetMap,
             this.heightMap,
@@ -106,7 +106,7 @@ export default class World{
     rebuildScene() {
         this.boardBevel.destroy()
         this.boardPlane.destroy()
-        this.boardAssets.destroy()
+        this.boardNature.destroy()
         this.lights.destroy()
         this.create()
         this.experience.camera.resetInitialPosition()

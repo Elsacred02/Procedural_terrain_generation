@@ -1,10 +1,10 @@
 import * as THREE from 'three'
 import Experience from '../../Experience'
-import Tree from './assetsClass/Tree'
-import Rock from './assetsClass/Rock'
-import AssetsConfiguration from './assetsClass/AssetsConfiguration'
+import Tree from './nature/Tree'
+import Rock from './nature/Rock'
+import AssetsConfiguration from './nature/AssetsConfiguration'
 
-export default class BoardAssets {
+export default class BoardNature {
     constructor(boardPlane, assetMap, heightMap, assetResolution, numberOfAssets) {
 
         this.experience = new Experience()
