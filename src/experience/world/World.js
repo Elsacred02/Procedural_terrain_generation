@@ -7,6 +7,7 @@ import BoardPlane from "./boardComponents/BoardPlane"
 import BoardBevel from "./boardComponents/BoardBevel"
 import BoardNature from "./boardComponents/nature/BoardNature"
 import villageMap from "./boardComponents/village/villageMap"
+import BoardVillage from "./boardComponents/village/BoardVillage"
 
 export default class World{
 
@@ -100,6 +101,13 @@ export default class World{
             this.heightMap,
             this.parameters.heightMapScaler,
             this.parameters.heightMapPower
+        )
+
+        this.boardVillage = new BoardVillage(
+            this.boardPlane, 
+            this.villageMap,
+            this.heightMap,
+            this.parameters.boardAssetResolution
         )
 
         this.boardNature = new BoardNature(

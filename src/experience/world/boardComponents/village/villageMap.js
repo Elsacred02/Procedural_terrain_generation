@@ -78,8 +78,8 @@ export default class villageMap {
             return sum / 4;
         }
         
-        getWorldHeight(value) {
-            const h = THREE.MathUtils.smoothstep(value, 0.2, 0.9)
-            return Math.pow(h, this.heightPower) * this.heightScale
-        }
+    getWorldHeight(value) {
+        const h = THREE.MathUtils.smoothstep(value, 0.2, 0.9)
+        return Math.pow(h, this.heightPower) * this.heightScale
+    }
 }

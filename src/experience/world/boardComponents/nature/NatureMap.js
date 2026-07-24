@@ -171,8 +171,6 @@ export default class NatureMap {
 
     removeTreesForVillages(villageMap) {
 
-        console.log(villageMap)
-
         const startX = villageMap.position.x
         const startY = villageMap.position.y
         const size = villageMap.villageSize;
