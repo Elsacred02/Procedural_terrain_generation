@@ -1,8 +1,8 @@
 import * as THREE from 'three'
-import Experience from '../../Experience'
-import Tree from './nature/Tree'
-import Rock from './nature/Rock'
-import AssetsConfiguration from './nature/AssetsConfiguration'
+import Experience from '../../../Experience'
+import Tree from './Tree'
+import Rock from './Rock'
+import AssetsConfiguration from './AssetsConfiguration'
 
 export default class BoardNature {
     constructor(boardPlane, assetMap, heightMap, assetResolution, numberOfAssets) {

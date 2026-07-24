@@ -2,10 +2,11 @@ import Experience from "../Experience"
 import * as THREE from 'three'
 import Lightning from "./Lightning"
 import HeightMap from "./HeightMap"
-import NatureMap from "./NatureMap"
+import NatureMap from "./boardComponents/nature/NatureMap"
 import BoardPlane from "./boardComponents/BoardPlane"
 import BoardBevel from "./boardComponents/BoardBevel"
-import BoardNature from "./boardComponents/BoardNature"
+import BoardNature from "./boardComponents/nature/BoardNature"
+import villageMap from "./boardComponents/village/villageMap"
 
 export default class World{
 
@@ -32,6 +33,7 @@ export default class World{
             percentTrees: 0.8,
             numberOfForests: 10,
             generationAlgorithm: "random",
+            villageSize: 10,
             generate: () => {
                 this.rebuildScene()
             }
@@ -53,18 +55,29 @@ export default class World{
             this.parameters.seed
         )
 
-        this.assetMap = new NatureMap(
+        this.villageMap = new villageMap(
+            this.heightMap,
+            this.parameters.villageSize,
+            this.parameters.heightMapScaler,
+            this.parameters.heightMapPower,
+            this.parameters.boardAssetResolution
+        )
+
+        this.natureMap = new NatureMap(
             this.heightMap,
             this.parameters.boardAssetResolution,
             this.parameters.heightMapScaler,
             this.parameters.heightMapPower
         )
+
+        this.natureMap.removeTreesForVillages(this.villageMap)
+
         switch(this.parameters.generationAlgorithm){
             case "random":
-                this.assetMap.randomAssetMap(this.parameters.numberOfAssets)
+                this.natureMap.randomAssetMap(this.parameters.numberOfAssets)
                 break
             case "forests":
-                this.assetMap.forestCluster(
+                this.natureMap.forestCluster(
                     this.parameters.numberOfAssets, 
                     this.parameters.numberOfForests, 
                     this.parameters.percentTrees, 
@@ -91,7 +104,7 @@ export default class World{
 
         this.boardNature = new BoardNature(
             this.boardPlane,
-            this.assetMap,
+            this.natureMap,
             this.heightMap,
             this.parameters.boardAssetResolution,
             this.parameters.numberOfAssets
@@ -130,7 +143,7 @@ export default class World{
             .min(5).max(20).step(1)
             .name("Mountains height")
         this.debugFolder.add(this.parameters, 'heightMapPower')
-            .min(1).max(20).step(0.1)
+            .min(0.1).max(20).step(0.1)
             .name("Plains size")
         this.debugFolder.add(this.parameters, 'boardAssetResolution', [4, 8])
             .name("Asset spawn resolution")
@@ -138,7 +151,7 @@ export default class World{
             .min(100).max(1000).step(50)
             .name("Number of spawn assets")
         this.numberOfForestsControl = this.debugFolder.add(this.parameters, 'numberOfForests')
-            .min(5).max(20).step(1)
+            .min(10).max(15).step(1)
             .name("Number of spawned forests").hide()
         this.percentTreesControl = this.debugFolder.add(this.parameters, 'percentTrees')
             .min(0.1).max(1).step(0.1)

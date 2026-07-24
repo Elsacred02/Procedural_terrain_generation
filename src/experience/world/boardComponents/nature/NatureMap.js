@@ -168,4 +168,36 @@ export default class NatureMap {
         const h = THREE.MathUtils.smoothstep(value, 0.2, 0.9)
         return Math.pow(h, this.heightPower) * this.heightScale
     }
+
+    removeTreesForVillages(villageMap) {
+
+        console.log(villageMap)
+
+        const startX = villageMap.position.x
+        const startY = villageMap.position.y
+        const size = villageMap.villageSize;
+
+
+        for (let y = 0; y < size; y++) {
+
+            for (let x = 0; x < size; x++) {
+
+                const assetX = startX + x
+                const assetY = startY + y
+
+                if (
+                    assetX < 0 ||
+                    assetY < 0 ||
+                    assetX >= this.width ||
+                    assetY >= this.height
+                ) {
+                    continue
+                }
+
+                const index = assetY * this.width + assetX
+
+                this.data[index] = 2
+            }
+        }
+    }
 }
