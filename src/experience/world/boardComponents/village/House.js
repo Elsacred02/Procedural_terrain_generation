@@ -3,7 +3,7 @@ import * as THREE from 'three'
 
 export default class House {
 
-    constructor(boardPlane, baseScale, type) {
+    constructor(id, boardPlane, baseScale, type) {
 
         this.experience = new Experience()
         this.scene = this.experience.scene
@@ -48,7 +48,6 @@ export default class House {
             y,
             z
         )
-
 
         // Rotazione
         house.rotation.set(

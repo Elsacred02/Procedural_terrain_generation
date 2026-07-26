@@ -12,6 +12,7 @@ export default class villageMap {
         )
 
         this.position = this.findIndexForVillageSpawn()
+        this.fillDataRandom()
     }
 
     findIndexForVillageSpawn() {
@@ -81,5 +82,11 @@ export default class villageMap {
     getWorldHeight(value) {
         const h = THREE.MathUtils.smoothstep(value, 0.2, 0.9)
         return Math.pow(h, this.heightPower) * this.heightScale
+    }
+
+    fillDataRandom() {
+        for (let i = 0; i < this.data.length; i++) {
+            this.data[i] = Math.floor(Math.random() * 4); // 0, 1, 2, 3
+        }
     }
 }

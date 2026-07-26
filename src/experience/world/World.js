@@ -107,7 +107,9 @@ export default class World{
             this.boardPlane, 
             this.villageMap,
             this.heightMap,
-            this.parameters.boardAssetResolution
+            this.parameters.boardAssetResolution,
+            this.parameters.heightMapPower,
+            this.parameters.heightMapScaler
         )
 
         this.boardNature = new BoardNature(
