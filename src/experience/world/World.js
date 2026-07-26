@@ -34,7 +34,7 @@ export default class World{
             percentTrees: 0.8,
             numberOfForests: 10,
             generationAlgorithm: "random",
-            villageSize: 10,
+            villageSize: 5,
             generate: () => {
                 this.rebuildScene()
             }
@@ -156,6 +156,9 @@ export default class World{
         this.debugFolder.add(this.parameters, 'numberOfAssets')
             .min(100).max(1000).step(50)
             .name("Number of spawn assets")
+        this.debugFolder.add(this.parameters, 'villageSize')
+            .min(5).max(15).step(1)
+            .name("Size of the village")
         this.numberOfForestsControl = this.debugFolder.add(this.parameters, 'numberOfForests')
             .min(10).max(15).step(1)
             .name("Number of spawned forests").hide()

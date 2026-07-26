@@ -38,7 +38,7 @@ export default class BoardVillage{
             for(let x = 0; x < this.villageSize; x++) {
                 const index = y * this.villageSize + x
 
-                if(this.villageMap.data[index] > 0) {
+                if(this.villageMap.data[index] > 0 && this.villageMap.data[index] != 255) {
                     const ax = (x + startX)
                     const ay = (y + startY)
 
@@ -47,11 +47,11 @@ export default class BoardVillage{
 
                     const worldX = -this.boardPlane.width / 2 +
                         ax * (this.boardPlane.width / (this.heightMap.width / this.boardAssetResolution)) + 
-                        Math.random() * 0.4 - 0.2
+                        Math.random() * 0.4
 
                     const worldZ = this.boardPlane.height / 2 -
                         ay * (this.boardPlane.height / (this.heightMap.height / this.boardAssetResolution)) + 
-                        Math.random() * 0.4 - 0.2
+                        Math.random() * 0.4
 
                     const worldY = this.heightMap.interpolateHeight(hx, hy)
                     
@@ -64,7 +64,7 @@ export default class BoardVillage{
                             worldY + selectedAsset.positionOffset,
                             worldZ, 
 
-                            0, 0, 0
+                            0, selectedAsset.rotation, 0
                         )
                     }
                 }

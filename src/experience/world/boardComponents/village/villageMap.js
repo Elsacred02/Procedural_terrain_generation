@@ -1,5 +1,13 @@
 import * as THREE from 'three'
 
+const defaultGeneration = [
+    3, 3, 3, 0, 0,
+    0, 0, 0, 0, 2,
+    3, 0, 1, 0, 3,
+    2, 0, 0, 0, 0,
+    0, 0, 3, 3, 3
+]
+
 export default class villageMap {
     constructor(heightMap, villageSize, boardAssetResolution) {
         this.heightMap = heightMap
@@ -65,7 +73,7 @@ export default class villageMap {
 
     fillDataRandom() {
         for (let i = 0; i < this.data.length; i++) {
-            this.data[i] = Math.floor(Math.random() * 4); // 0, 1, 2, 3
+            this.data[i] = Math.floor(Math.random() * 12);
         }
     }
 }
