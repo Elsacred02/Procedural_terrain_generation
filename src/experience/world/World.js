@@ -20,6 +20,7 @@ export default class World{
         
         // Set debug GUI
         this.parameters = {
+            seed: 0,
             boardBevel: 4,
             boardWidth: 64,
             boardHeight: 64,
@@ -28,7 +29,6 @@ export default class World{
             perlinNoiseCoordinatesScale: 0.01,
             heightMapScaler: 10,
             heightMapPower: 3.0,
-            seed: 0,
             boardAssetResolution: 4,
             numberOfAssets : 500,
             percentTrees: 0.8,
@@ -53,25 +53,21 @@ export default class World{
             this.parameters.boardHeight * this.parameters.boardVertexRatio,
             this.parameters.perlinNoiseOctaves,
             this.parameters.perlinNoiseCoordinatesScale,
-            this.parameters.seed
+            this.parameters.seed,
+            this.parameters.heightMapScaler,
+            this.parameters.heightMapPower
         )
 
         this.villageMap = new villageMap(
             this.heightMap,
             this.parameters.villageSize,
-            this.parameters.heightMapScaler,
-            this.parameters.heightMapPower,
             this.parameters.boardAssetResolution
         )
 
         this.natureMap = new NatureMap(
             this.heightMap,
-            this.parameters.boardAssetResolution,
-            this.parameters.heightMapScaler,
-            this.parameters.heightMapPower
+            this.parameters.boardAssetResolution
         )
-
-        this.natureMap.removeTreesForVillages(this.villageMap)
 
         switch(this.parameters.generationAlgorithm){
             case "random":
@@ -87,6 +83,8 @@ export default class World{
                 break
         }
 
+        this.natureMap.removeTreesForVillages(this.villageMap)
+
         this.boardBevel = new BoardBevel(
             this.parameters.boardWidth,
             this.parameters.boardHeight,
@@ -98,18 +96,14 @@ export default class World{
             this.parameters.boardWidth,
             this.parameters.boardHeight,
             this.parameters.boardVertexRatio,
-            this.heightMap,
-            this.parameters.heightMapScaler,
-            this.parameters.heightMapPower
+            this.heightMap
         )
 
         this.boardVillage = new BoardVillage(
             this.boardPlane, 
             this.villageMap,
             this.heightMap,
-            this.parameters.boardAssetResolution,
-            this.parameters.heightMapPower,
-            this.parameters.heightMapScaler
+            this.parameters.boardAssetResolution
         )
 
         this.boardNature = new BoardNature(
@@ -129,8 +123,10 @@ export default class World{
     rebuildScene() {
         this.boardBevel.destroy()
         this.boardPlane.destroy()
+        this.boardVillage.destroy()
         this.boardNature.destroy()
         this.lights.destroy()
+        console.log(this.scene)
         this.create()
         this.experience.camera.resetInitialPosition()
     }

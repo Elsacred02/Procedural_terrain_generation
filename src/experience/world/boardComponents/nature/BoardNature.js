@@ -13,15 +13,10 @@ export default class BoardNature {
         this.assetMap = assetMap
         this.heightMap = heightMap
         this.resources = this.experience.resources
-        this.heightScale = this.boardPlane.heightScale
-        this.heightPower = this.boardPlane.heightPower
+        this.heightScale = this.heightMap.heightScale
+        this.heightPower = this.heightMap.heightPower
         this.assetResolution = assetResolution
         this.numberOfAssets = numberOfAssets
-        this.treeProportions = {
-            spruce: 80,
-            oak:20,
-        }
-
         this.assetConfig = AssetsConfiguration
         this.setupAssets()
         this.setup()
@@ -68,8 +63,7 @@ export default class BoardNature {
                         y * (this.boardPlane.height / this.assetMap.height) + 
                         Math.random() * 0.4 - 0.2
 
-                    const hNormal = this.interpolateHeight(hx, hy)
-                    const worldY = this.getWorldHeight(hNormal)
+                    const worldY = this.heightMap.interpolateHeight(hx, hy)
                     
                     const selectedAsset = this.selectAssetForHeight(worldY)
                     if (selectedAsset) {
@@ -119,36 +113,6 @@ export default class BoardNature {
         return assets[0] 
     }
 
-    interpolateHeight(startX, startY) {
-
-        let sum = 0;
-
-        for (let y = 0; y < 2; y++) {
-
-            for (let x = 0; x < 2; x++) {
-
-                const hx = startX + x;
-                const hy = startY + y;
-
-                const index = hy * this.heightMap.width + hx;
-
-                sum += this.heightMap.data[index];
-            }
-        }
-
-        return sum / 4;
-    }
-
-    getWorldHeight(value) {
-
-        const h = THREE.MathUtils.smoothstep(
-            value,
-            0.2,
-            0.9
-        )
-
-        return Math.pow(h, this.heightPower) * this.heightScale
-    }
 
     destroy() {
 
@@ -158,7 +122,7 @@ export default class BoardNature {
 
             if (
                 child.isInstancedMesh &&
-                child.userData.boardAsset
+                child.userData.boardNature
             ) {
                 meshesToRemove.push(child);
             }

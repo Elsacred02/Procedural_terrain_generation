@@ -13,10 +13,8 @@ export default class House {
         this.baseScale = baseScale
         this.type = type
 
-        // Asset originale importato
         this.meshHouse = this.resources.items[type + "_house"].scene
 
-        // Shadow sull'asset originale
         this.meshHouse.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true
@@ -28,11 +26,10 @@ export default class House {
 
     spawn(x, y, z, rx = 0, ry = 0, rz = 0) {
 
-        // Crea una copia indipendente della gerarchia
         const house = this.meshHouse.clone()
 
+        house.userData.boardVillage = true
 
-        // Scala relativa alla board
         const scale = this.baseScale / this.boardPlane.vertexRatio
 
         house.scale.set(

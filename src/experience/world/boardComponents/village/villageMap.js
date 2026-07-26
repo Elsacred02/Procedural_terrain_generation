@@ -1,11 +1,9 @@
 import * as THREE from 'three'
 
 export default class villageMap {
-    constructor(heightMap, villageSize, heightScale, heightPower, boardAssetResolution) {
+    constructor(heightMap, villageSize, boardAssetResolution) {
         this.heightMap = heightMap
         this.villageSize = villageSize
-        this.heightScale = heightScale
-        this.heightPower = heightPower
         this.boardAssetResolution = boardAssetResolution
         this.data = new Uint8Array(
             this.villageSize * this.villageSize
@@ -31,8 +29,7 @@ export default class villageMap {
                     for (let vx = 0; vx < this.villageSize; vx++) {
                         const hx = (ax + vx) * this.boardAssetResolution
                         const hy = (ay + vy) * this.boardAssetResolution
-                        const interpolated = this.interpolateHeight(hx, hy)
-                        const worldHeight = this.getWorldHeight(interpolated)
+                        const worldHeight = this.heightMap.interpolateHeight(hx, hy)
                         heights.push(worldHeight)
                     }
                 }
@@ -64,24 +61,6 @@ export default class villageMap {
             y: bestY,
             variance: bestVariance
         };
-    }
-
-    interpolateHeight(startX, startY) {
-            let sum = 0;
-            for (let y = 0; y < 2; y++) {
-                for (let x = 0; x < 2; x++) {
-                    const hx = startX + x;
-                    const hy = startY + y;
-                    const index = hy * this.heightMap.width + hx;
-                    sum += this.heightMap.data[index];
-                }
-            }
-            return sum / 4;
-        }
-        
-    getWorldHeight(value) {
-        const h = THREE.MathUtils.smoothstep(value, 0.2, 0.9)
-        return Math.pow(h, this.heightPower) * this.heightScale
     }
 
     fillDataRandom() {

@@ -1,15 +1,16 @@
+import Experience from '../../../Experience'
 import AssetsConfiguration from './AssetsConfiguration'
 import * as THREE from 'three'
 
 export default class BoardVillage{
-    constructor(boardPlane, villageMap, heightMap, boardAssetResolution, heightPower, heightScale) {
+    constructor(boardPlane, villageMap, heightMap, boardAssetResolution) {
+        this.experience = new Experience()
+        this.scene = this.experience.scene
         this.boardPlane = boardPlane
         this.heightMap = heightMap
         this.villageMap = villageMap
         this.boardAssetResolution = boardAssetResolution
         this.assetConfig = AssetsConfiguration
-        this.heightPower = heightPower
-        this.heightScale = heightScale
         this.villageSize = Math.sqrt(this.villageMap.data.length)
 
         this.setupAssets()
@@ -52,8 +53,7 @@ export default class BoardVillage{
                         ay * (this.boardPlane.height / (this.heightMap.height / this.boardAssetResolution)) + 
                         Math.random() * 0.4 - 0.2
 
-                    const hNormal = this.interpolateHeight(hx, hy)
-                    const worldY = this.getWorldHeight(hNormal)
+                    const worldY = this.heightMap.interpolateHeight(hx, hy)
                     
                     const selectedAsset = this.assetConfig.find(
                         asset => asset.id === this.villageMap.data[index]
@@ -72,21 +72,38 @@ export default class BoardVillage{
         }
     }
 
-    interpolateHeight(startX, startY) {
-        let sum = 0;
-        for (let y = 0; y < 2; y++) {
-            for (let x = 0; x < 2; x++) {
-                const hx = startX + x;
-                const hy = startY + y;
-                const index = hy * this.heightMap.width + hx;
-                sum += this.heightMap.data[index];
+    destroy() {
+
+        const objectsToRemove = []
+
+        this.scene.traverse((child) => {
+
+            if (child.userData.boardVillage) {
+                objectsToRemove.push(child)
             }
+
+        })
+
+
+        for (const object of objectsToRemove) {
+
+            object.removeFromParent()
+
+            object.traverse((child) => {
+
+                if (child.isMesh) {
+
+                    child.geometry.dispose()
+
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(material => material.dispose())
+                    } else {
+                        child.material.dispose()
+                    }
+
+                }
+
+            })
         }
-        return sum / 4;
-    }
-            
-    getWorldHeight(value) {
-        const h = THREE.MathUtils.smoothstep(value, 0.2, 0.9)
-        return Math.pow(h, this.heightPower) * this.heightScale
     }
 }
