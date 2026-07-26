@@ -43,7 +43,7 @@ export default class BoardVillage{
                     const ay = (y + startY)
 
                     const hx = ax * this.boardAssetResolution
-                    const hy = ax * this.boardAssetResolution
+                    const hy = ay * this.boardAssetResolution
 
                     const worldX = -this.boardPlane.width / 2 +
                         ax * (this.boardPlane.width / (this.heightMap.width / this.boardAssetResolution)) + 
