@@ -59,12 +59,14 @@ export default class BoardVillage{
                         asset => asset.id === this.villageMap.data[index]
                     )
                     if (selectedAsset) {
+                        let anglesScale = [0.25, 0.5, 0.75, 1]
+                        let choosenAngle = Math.PI * 2 * anglesScale[Math.floor(Math.random() * anglesScale.length)]
                         this.assets[selectedAsset.name].spawn(
                             worldX,
                             worldY + selectedAsset.positionOffset,
                             worldZ, 
 
-                            0, selectedAsset.rotation, 0
+                            0, choosenAngle, 0
                         )
                     }
                 }

@@ -31,7 +31,6 @@ export default class NatureMap {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
                 const height = this.heightMap.interpolateHeight(x * this.assetResolution, y * this.assetResolution)
-                console.log(height)
                 matrix[y * this.width + x] = height <= maxValidHeight * this.heightScale ? 1 : 0
             }
         }

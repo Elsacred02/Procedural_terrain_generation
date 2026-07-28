@@ -1,11 +1,12 @@
 import * as THREE from 'three'
+import WFC from '../../../utils/WFC'
 
 const defaultGeneration = [
-    3, 3, 3, 0, 0,
-    0, 0, 0, 0, 2,
-    3, 0, 1, 0, 3,
-    2, 0, 0, 0, 0,
-    0, 0, 3, 3, 3
+    3, 3, 2, 3, 0,
+    0, 0, 2, 0, 0,
+    0, 3, 1, 2, 2,
+    3, 0, 3, 0, 2,
+    3, 0, 0, 0, 2
 ]
 
 export default class villageMap {
@@ -18,7 +19,7 @@ export default class villageMap {
         )
 
         this.position = this.findIndexForVillageSpawn()
-        this.fillDataRandom()
+        this.fillDataWithWFC()
     }
 
     findIndexForVillageSpawn() {
@@ -73,7 +74,12 @@ export default class villageMap {
 
     fillDataRandom() {
         for (let i = 0; i < this.data.length; i++) {
-            this.data[i] = Math.floor(Math.random() * 12);
+            this.data[i] = Math.floor(Math.random() * 3);
         }
+    }
+
+    fillDataWithWFC() {
+        this.wfc = new WFC(this.villageSize, defaultGeneration)
+        this.data = this.wfc.data
     }
 }
