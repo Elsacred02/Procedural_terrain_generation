@@ -99,5 +99,7 @@ export default class Lightning{
             this.debugFolder.destroy()
             this.debugFolder = null
         }
+
+        this.scene.remove(this.directionaLightHelper)
     }
 }

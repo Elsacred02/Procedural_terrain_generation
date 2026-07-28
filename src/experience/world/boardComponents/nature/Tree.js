@@ -31,14 +31,14 @@ export default class SpruceTree {
             this.logMaterial,
             maxNumber
         )
-        this.meshLog.userData.boardAsset = true
+        this.meshLog.userData.boardNature = true
 
         this.meshLeaves = new THREE.InstancedMesh(
             this.leavesGeometry,
             this.leavesMaterial,
             maxNumber
         )
-        this.meshLeaves.userData.boardAsset = true
+        this.meshLeaves.userData.boardNature = true
 
         this.meshLog.count = 0
         this.meshLeaves.count = 0

@@ -6,7 +6,7 @@ import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
 
 export default class BoardPlane {
 
-    constructor(width, height, vertexRatio, heightMap, heightScale, heightPower) {
+    constructor(width, height, vertexRatio, heightMap) {
 
         this.experience = new Experience()
         this.scene = this.experience.scene
@@ -16,8 +16,8 @@ export default class BoardPlane {
         this.vertexRatio = vertexRatio
 
         this.heightMap = heightMap
-        this.heightScale = heightScale
-        this.heightPower = heightPower
+        this.heightScale = this.heightMap.heightScale
+        this.heightPower = this.heightMap.heightPower
 
         const stepX = this.width / (this.width * this.vertexRatio - 1)
         const stepY = this.height / (this.height * this.vertexRatio - 1)

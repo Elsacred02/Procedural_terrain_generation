@@ -2,10 +2,12 @@ import Experience from "../Experience"
 import * as THREE from 'three'
 import Lightning from "./Lightning"
 import HeightMap from "./HeightMap"
-import AssetMap from "./AssetMap"
+import NatureMap from "./boardComponents/nature/NatureMap"
 import BoardPlane from "./boardComponents/BoardPlane"
 import BoardBevel from "./boardComponents/BoardBevel"
-import BoardAssets from "./boardComponents/BoardAssets"
+import BoardNature from "./boardComponents/nature/BoardNature"
+import villageMap from "./boardComponents/village/villageMap"
+import BoardVillage from "./boardComponents/village/BoardVillage"
 
 export default class World{
 
@@ -18,6 +20,7 @@ export default class World{
         
         // Set debug GUI
         this.parameters = {
+            seed: 0,
             boardBevel: 4,
             boardWidth: 64,
             boardHeight: 64,
@@ -26,12 +29,12 @@ export default class World{
             perlinNoiseCoordinatesScale: 0.01,
             heightMapScaler: 10,
             heightMapPower: 3.0,
-            seed: 0,
             boardAssetResolution: 4,
             numberOfAssets : 500,
             percentTrees: 0.8,
             numberOfForests: 10,
             generationAlgorithm: "random",
+            villageSize: 5,
             generate: () => {
                 this.rebuildScene()
             }
@@ -50,21 +53,28 @@ export default class World{
             this.parameters.boardHeight * this.parameters.boardVertexRatio,
             this.parameters.perlinNoiseOctaves,
             this.parameters.perlinNoiseCoordinatesScale,
-            this.parameters.seed
-        )
-
-        this.assetMap = new AssetMap(
-            this.heightMap,
-            this.parameters.boardAssetResolution,
+            this.parameters.seed,
             this.parameters.heightMapScaler,
             this.parameters.heightMapPower
         )
+
+        this.villageMap = new villageMap(
+            this.heightMap,
+            this.parameters.villageSize,
+            this.parameters.boardAssetResolution
+        )
+
+        this.natureMap = new NatureMap(
+            this.heightMap,
+            this.parameters.boardAssetResolution
+        )
+
         switch(this.parameters.generationAlgorithm){
             case "random":
-                this.assetMap.randomAssetMap(this.parameters.numberOfAssets)
+                this.natureMap.randomAssetMap(this.parameters.numberOfAssets)
                 break
             case "forests":
-                this.assetMap.forestCluster(
+                this.natureMap.forestCluster(
                     this.parameters.numberOfAssets, 
                     this.parameters.numberOfForests, 
                     this.parameters.percentTrees, 
@@ -72,6 +82,8 @@ export default class World{
                 )
                 break
         }
+
+        this.natureMap.removeTreesForVillages(this.villageMap)
 
         this.boardBevel = new BoardBevel(
             this.parameters.boardWidth,
@@ -84,14 +96,19 @@ export default class World{
             this.parameters.boardWidth,
             this.parameters.boardHeight,
             this.parameters.boardVertexRatio,
-            this.heightMap,
-            this.parameters.heightMapScaler,
-            this.parameters.heightMapPower
+            this.heightMap
         )
 
-        this.boardAssets = new BoardAssets(
+        this.boardVillage = new BoardVillage(
+            this.boardPlane, 
+            this.villageMap,
+            this.heightMap,
+            this.parameters.boardAssetResolution
+        )
+
+        this.boardNature = new BoardNature(
             this.boardPlane,
-            this.assetMap,
+            this.natureMap,
             this.heightMap,
             this.parameters.boardAssetResolution,
             this.parameters.numberOfAssets
@@ -106,8 +123,10 @@ export default class World{
     rebuildScene() {
         this.boardBevel.destroy()
         this.boardPlane.destroy()
-        this.boardAssets.destroy()
+        this.boardVillage.destroy()
+        this.boardNature.destroy()
         this.lights.destroy()
+        console.log(this.scene)
         this.create()
         this.experience.camera.resetInitialPosition()
     }
@@ -130,15 +149,18 @@ export default class World{
             .min(5).max(20).step(1)
             .name("Mountains height")
         this.debugFolder.add(this.parameters, 'heightMapPower')
-            .min(1).max(20).step(0.1)
+            .min(0.1).max(20).step(0.1)
             .name("Plains size")
         this.debugFolder.add(this.parameters, 'boardAssetResolution', [4, 8])
             .name("Asset spawn resolution")
         this.debugFolder.add(this.parameters, 'numberOfAssets')
             .min(100).max(1000).step(50)
             .name("Number of spawn assets")
+        this.debugFolder.add(this.parameters, 'villageSize')
+            .min(5).max(15).step(1)
+            .name("Size of the village")
         this.numberOfForestsControl = this.debugFolder.add(this.parameters, 'numberOfForests')
-            .min(5).max(20).step(1)
+            .min(10).max(15).step(1)
             .name("Number of spawned forests").hide()
         this.percentTreesControl = this.debugFolder.add(this.parameters, 'percentTrees')
             .min(0.1).max(1).step(0.1)

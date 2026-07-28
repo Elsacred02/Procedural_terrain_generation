@@ -1,13 +1,12 @@
 import * as THREE from 'three'
 
-export default class AssetMap {
-    constructor(heightMap, assetResolution, heightScale, heightPower) {
+export default class NatureMap {
+    constructor(heightMap, assetResolution) {
         this.heightMap = heightMap
         this.width = heightMap.width / assetResolution
         this.height = heightMap.height / assetResolution
+        this.heightScale = this.heightMap.heightScale
         this.assetResolution = assetResolution
-        this.heightScale = heightScale
-        this.heightPower = heightPower
         this.data = new Float32Array(
             this.width * this.height
         )
@@ -31,7 +30,7 @@ export default class AssetMap {
     computeValidCells(maxValidHeight, matrix) {
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
-                const height = this.getWorldHeight(this.interpolateHeight(x * this.assetResolution, y * this.assetResolution))
+                const height = this.heightMap.interpolateHeight(x * this.assetResolution, y * this.assetResolution)
                 matrix[y * this.width + x] = height <= maxValidHeight * this.heightScale ? 1 : 0
             }
         }
@@ -151,21 +150,33 @@ export default class AssetMap {
         return points
     }
 
-    interpolateHeight(startX, startY) {
-        let sum = 0;
-        for (let y = 0; y < 2; y++) {
-            for (let x = 0; x < 2; x++) {
-                const hx = startX + x;
-                const hy = startY + y;
-                const index = hy * this.heightMap.width + hx;
-                sum += this.heightMap.data[index];
+    removeTreesForVillages(villageMap) {
+
+        const startX = villageMap.position.x
+        const startY = villageMap.position.y
+        const size = villageMap.villageSize;
+
+
+        for (let y = 0; y < size; y++) {
+
+            for (let x = 0; x < size; x++) {
+
+                const assetX = startX + x
+                const assetY = startY + y
+
+                if (
+                    assetX < 0 ||
+                    assetY < 0 ||
+                    assetX >= this.width ||
+                    assetY >= this.height
+                ) {
+                    continue
+                }
+
+                const index = assetY * this.width + assetX
+
+                this.data[index] = 2
             }
         }
-        return sum / 4;
-    }
-    
-    getWorldHeight(value) {
-        const h = THREE.MathUtils.smoothstep(value, 0.2, 0.9)
-        return Math.pow(h, this.heightPower) * this.heightScale
     }
 }

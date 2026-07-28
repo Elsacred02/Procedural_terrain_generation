@@ -1,10 +1,10 @@
 import * as THREE from 'three'
-import Experience from '../../Experience'
-import Tree from './assetsClass/Tree'
-import Rock from './assetsClass/Rock'
-import AssetsConfiguration from './assetsClass/AssetsConfiguration'
+import Experience from '../../../Experience'
+import Tree from './Tree'
+import Rock from './Rock'
+import AssetsConfiguration from './AssetsConfiguration'
 
-export default class BoardAssets {
+export default class BoardNature {
     constructor(boardPlane, assetMap, heightMap, assetResolution, numberOfAssets) {
 
         this.experience = new Experience()
@@ -13,15 +13,10 @@ export default class BoardAssets {
         this.assetMap = assetMap
         this.heightMap = heightMap
         this.resources = this.experience.resources
-        this.heightScale = this.boardPlane.heightScale
-        this.heightPower = this.boardPlane.heightPower
+        this.heightScale = this.heightMap.heightScale
+        this.heightPower = this.heightMap.heightPower
         this.assetResolution = assetResolution
         this.numberOfAssets = numberOfAssets
-        this.treeProportions = {
-            spruce: 80,
-            oak:20,
-        }
-
         this.assetConfig = AssetsConfiguration
         this.setupAssets()
         this.setup()
@@ -68,8 +63,7 @@ export default class BoardAssets {
                         y * (this.boardPlane.height / this.assetMap.height) + 
                         Math.random() * 0.4 - 0.2
 
-                    const hNormal = this.interpolateHeight(hx, hy)
-                    const worldY = this.getWorldHeight(hNormal)
+                    const worldY = this.heightMap.interpolateHeight(hx, hy)
                     
                     const selectedAsset = this.selectAssetForHeight(worldY)
                     if (selectedAsset) {
@@ -119,36 +113,6 @@ export default class BoardAssets {
         return assets[0] 
     }
 
-    interpolateHeight(startX, startY) {
-
-        let sum = 0;
-
-        for (let y = 0; y < 2; y++) {
-
-            for (let x = 0; x < 2; x++) {
-
-                const hx = startX + x;
-                const hy = startY + y;
-
-                const index = hy * this.heightMap.width + hx;
-
-                sum += this.heightMap.data[index];
-            }
-        }
-
-        return sum / 4;
-    }
-
-    getWorldHeight(value) {
-
-        const h = THREE.MathUtils.smoothstep(
-            value,
-            0.2,
-            0.9
-        )
-
-        return Math.pow(h, this.heightPower) * this.heightScale
-    }
 
     destroy() {
 
@@ -158,7 +122,7 @@ export default class BoardAssets {
 
             if (
                 child.isInstancedMesh &&
-                child.userData.boardAsset
+                child.userData.boardNature
             ) {
                 meshesToRemove.push(child);
             }

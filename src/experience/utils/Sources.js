@@ -18,7 +18,7 @@ export default [
     },
 
     {
-        name : 'big_ouse',
+        name : 'big_house',
         type : 'gltfModel',
         path : ['./models/houses/big_house.glb']
     },
