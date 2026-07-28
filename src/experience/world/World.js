@@ -8,6 +8,7 @@ import BoardBevel from "./boardComponents/BoardBevel"
 import BoardNature from "./boardComponents/nature/BoardNature"
 import villageMap from "./boardComponents/village/villageMap"
 import BoardVillage from "./boardComponents/village/BoardVillage"
+import Sky from "./Sky"
 
 export default class World{
 
@@ -20,6 +21,7 @@ export default class World{
         
         // Set debug GUI
         this.parameters = {
+            sky: true,
             seed: 0,
             boardBevel: 4,
             boardWidth: 64,
@@ -47,6 +49,9 @@ export default class World{
     }
 
     create() {
+
+        if(this.parameters.sky)
+            this.sky = new Sky()
 
         this.heightMap = new HeightMap(
             this.parameters.boardWidth * this.parameters.boardVertexRatio,
@@ -125,6 +130,8 @@ export default class World{
         this.boardPlane.destroy()
         this.boardVillage.destroy()
         this.boardNature.destroy()
+        if(this.parameters.sky)
+            this.sky.destroy()
         this.lights.destroy()
         console.log(this.scene)
         this.create()
@@ -177,6 +184,14 @@ export default class World{
                     this.percentTreesControl.show()
                 }
             })
+        this.debugFolder.add(this.parameters, 'sky').onChange((value) => {
+            if(value) {
+                this.sky = new Sky()
+            }
+            else{
+                this.sky.destroy()
+            }
+        })
         this.debugFolder.add(this.parameters, 'generate')
     }
 }

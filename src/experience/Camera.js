@@ -21,7 +21,7 @@ export default class Camera{
     }
 
     setInstance() {
-        this.instance = new PerspectiveCamera(50, this.sizes.width / this.sizes.height, 0.1, 1000)
+        this.instance = new PerspectiveCamera(50, this.sizes.width / this.sizes.height, 0.1, 2000)
         this.instance.position.set(0, 70, 70)
         this.scene.add(this.instance)
     }
@@ -31,6 +31,7 @@ export default class Camera{
         this.controls.minPolarAngle = 0
         this.controls.maxPolarAngle = Math.PI / 2;
         this.controls.enableDamping = true
+        this.controls.maxDistance = 200
     }
 
     resize() {

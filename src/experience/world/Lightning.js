@@ -16,10 +16,10 @@ export default class Lightning{
 
     setLights() {
 
-        this.ambientLight = new THREE.HemisphereLight('#ffffff','#008000', 0.7)
+        this.ambientLight = new THREE.HemisphereLight('#ffffff','#008000', 0.8)
         this.scene.add(this.ambientLight)
 
-        this.directionalLight = new THREE.DirectionalLight('#ffffff', 0.5)
+        this.directionalLight = new THREE.DirectionalLight('#ffffff', 1.0)
         this.directionalLight.target.position.set(0, 0, 0)
         this.directionalLight.position.set(- this.boardWidth / 2 - 2, 32, this.boardHeight / 2 + 2)
         this.directionalLight.castShadow = true
