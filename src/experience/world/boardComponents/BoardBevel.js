@@ -13,6 +13,7 @@ export default class BoardBevel{
         this.bevelHeightness = bevelHeightness
 
         this.setup()
+        this.korokSpawn()
     }
 
     setup() {
@@ -43,9 +44,39 @@ export default class BoardBevel{
         this.scene.add(this.boardBorders)
     }
 
+    korokSpawn(){
+        this.korok = this.experience.resources.items["korok"].scene
+        this.korokAdded = false
+        this.korok.position.set(-32, this.bevelHeightness, -32)
+        this.korok.rotation.set(0, Math.PI / 4, 0)
+
+        const spawn = Math.floor(Math.random() * 50)
+
+        if(spawn == 9){
+            this.scene.add(this.korok)
+            this.korokAdded = true
+        }
+    }
+
     destroy() {
         this.scene.remove(this.boardBorders)
         this.boardBorders.material.dispose()
         this.boardBorders.geometry.dispose()
+        if(this.korokAdded == true){
+            this.scene.remove(this.korok)
+            this.korok.traverse((child) => {
+                if (child.isMesh) {
+                    child.geometry?.dispose()
+
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(material => material.dispose())
+                    } else {
+                        child.material?.dispose()
+                    }
+                }
+            })
+
+            this.korok = null
+        }
     }
 }

@@ -64,4 +64,10 @@ export default [
         type : 'gltfModel',
         path : ['./models/trees/spruce_tree.glb']
     },
+
+    {
+        name : 'korok',
+        type : 'gltfModel',
+        path : ['./models/korok/korok.glb']
+    },
 ]

@@ -133,7 +133,6 @@ export default class World{
         if(this.parameters.sky)
             this.sky.destroy()
         this.lights.destroy()
-        console.log(this.scene)
         this.create()
         this.experience.camera.resetInitialPosition()
     }
