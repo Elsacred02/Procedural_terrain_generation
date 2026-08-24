@@ -1,3 +1,8 @@
+
+<div align="center">
+  <img src="img/logo.png" alt="Logo" width="80%">
+</div>
+
 # Game design seminar - generation of procedural terrains for videogames
 
 One of the most important aspects of video game development concerns the procedural generation of game worlds, because it allows the player to have a different experience in every playthrough, ensuring a high level of replayability.
